@@ -5,7 +5,50 @@
 
 ## TRẠNG THÁI HIỆN TẠI
 
-**File app mới nhất:** be-hoc-gioi-v14.html
+**Đã chuyển sang git + deploy Vercel — không còn dùng file "vXX" đơn lẻ nữa.**
+Repo: https://github.com/LukeNguyen66/Lop-2 (nhánh `main`) — mỗi lần push, Vercel tự
+động build lại. Link app đang chạy: https://lop-2-chi.vercel.app/
+
+**🆕 ĐỢT NÀY (Claude Code, phiên bàn giao đầu tiên) — khởi tạo git + Vercel, thêm video
+AI thật cho cảnh "dạy học":**
+
+1. **Hạ tầng:** `git init`, push code lên GitHub (`LukeNguyen66/Lop-2`), import + deploy
+   trên Vercel qua giao diện web (không dùng CLI vì máy gặp lỗi PATH không nhận diện
+   lệnh `vercel` ngay cả sau khi cài — đã né bằng cách deploy qua vercel.com/new, connect
+   GitHub, từ đó auto-deploy mỗi lần push).
+2. **Video AI thay cho icon ghép ở cảnh "dạy học":** bố mẹ gửi 1 video ảnh động AI
+   (`images/dayhoc.mp4`, ~3MB), khai báo trong `IMAGE_ASSETS.dayhoc`. Engine
+   (`mountScenecards`) giờ tự nhận diện đuôi file `.mp4/.webm/.mov` để render `<video>`
+   thay vì `<img>` — cơ chế thêm ảnh/video vẫn y hệt cũ (chỉ cần 1 dòng trong
+   `IMAGE_ASSETS`, không sửa gì khác).
+3. **Cách xem video — làm qua 3 vòng chỉnh sửa theo phản hồi trực tiếp của bố mẹ:**
+   - Vòng 1: video tự động autoplay+loop ngay trong thẻ nhỏ, bấm vào thẻ chỉ tạo hiệu
+     ứng "lắc" (kế thừa hiệu ứng cũ của icon tĩnh) → bố mẹ chê "không cần lắc nữa".
+   - Vòng 2: bỏ autoplay/loop, thẻ nhỏ chỉ hiện khung hình đầu + icon ▶, bấm vào mới
+     phát video (dừng hẳn khi hết, bấm lại phát lại từ đầu) — nhưng vẫn phát ngay tại
+     chỗ, kích thước nhỏ như cũ.
+   - Vòng 3 (bản hiện tại): bấm "Bấm để xem" mở **modal lớn giữa màn hình**
+     (`#videoModal` trong `index.html`, hàm `openSceneVideo`/`toggleSceneVideo`/
+     `closeSceneModal` trong `engine.js`) — phát video cỡ lớn, có nút đóng ✕, bấm ra
+     ngoài cũng đóng, bấm lại vào video sau khi hết sẽ phát lại từ đầu. Bỏ `muted` để
+     có tiếng (video có âm thanh thật, phát nghe được khi bấm xem).
+   - **Bài học:** khi thêm media thật (ảnh/video AI) thay cho icon SVG ghép, đừng giữ
+     nguyên cơ chế tương tác cũ (hiệu ứng lắc, kích thước nhỏ) — media thật cần cách xem
+     riêng (modal to, điều khiển play/stop rõ ràng) vì mục đích khác hẳn icon tĩnh minh
+     hoạ. Cảnh "khám bệnh" (chưa có video, vẫn dùng icon ghép SVG cũ) vẫn giữ hiệu ứng
+     lắc như trước — engine tự phân nhánh theo việc `IMAGE_ASSETS[sceneKey]` có video
+     hay không, không cần sửa dữ liệu bài học.
+4. **Kiểm tra trước khi giao:** `node --check` cú pháp OK cho mọi file JS sửa; test
+   trực tiếp qua Browser preview (không chỉ đọc code) — xác nhận modal mở/đóng đúng,
+   video dừng đúng lúc hết và phát lại đúng khi bấm lại, không có lỗi console; sau khi
+   push, xác nhận lại trên bản deploy thật (`lop-2-chi.vercel.app`) bằng cách fetch
+   trực tiếp file JS/HTML production để chắc Vercel đã build đúng bản mới, không chỉ tin
+   theo "push xong là xong".
+
+---
+
+**File app gốc (mốc lịch sử, không còn cập nhật):** be-hoc-gioi-v14.html — xem đợt v14
+bên dưới để biết lịch sử trước khi tách thành cấu trúc web.
 
 **🆕 ĐỢT NÀY (v14) — sửa 6 lỗi "icon đồ vật thay cho đúng nghĩa từ", mở rộng engine:**
 

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#5B8DEF">
+<title>Bé Học Giỏi</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <button class="icon-btn hidden" id="backBtn" onclick="goBack()">‹ Quay lại</button>
+    <div class="crumb" id="crumb"></div>
+    <div class="pill">⭐ <span id="stars">0</span></div>
+  </div>
+
+  <!-- 1. CHỌN MÔN (màn hình đầu) -->
+  <section class="screen active" id="s_subject">
+    <div class="hero"><div class="mascot" id="mascot">🦉</div><h1>Bé Học Giỏi</h1><p>Lớp 2 · Kết nối tri thức · Học – Luyện – Thi</p></div>
+    <div class="section-label">Chọn môn học</div>
+    <div class="card-list">
+      <button class="big-card g-blue" onclick="openSubject('toan')">
+        <span class="ic">🔢</span><span class="t"><h2>Toán</h2><span>Số, phép tính, hình học</span></span><span class="arrow">›</span>
+      </button>
+      <button class="big-card g-orange" onclick="openSubject('tv')">
+        <span class="ic">📖</span><span class="t"><h2>Tiếng Việt</h2><span>Chính tả, từ ngữ, câu</span></span><span class="arrow">›</span>
+      </button>
+    </div>
+    <div class="note">Nội dung do bố mẹ và trợ lý bổ sung dần. Bài chưa có nội dung hiện khóa 🔒.<br>Một số hình minh họa: Twemoji by Twitter, Inc — CC-BY 4.0.</div>
+  </section>
+
+  <!-- 3. CHỌN CHƯƠNG + BÀI -->
+  <section class="screen" id="s_lessons">
+    <div class="section-label" id="lessonsLabel">Chọn bài</div>
+    <div id="chapterList"></div>
+  </section>
+
+  <!-- 4. CHỌN CHẾ ĐỘ -->
+  <section class="screen" id="s_modes">
+    <div class="section-label" id="modeTitle">Chọn cách học</div>
+    <div class="modes">
+      <button class="big-card g-teal" id="mode-learn" onclick="openLearn()">
+        <span class="ic">📚</span><span class="t"><h2>Học bài</h2><span>Xem kiến thức và ví dụ</span></span></button>
+      <button class="big-card g-grape" id="mode-practice" onclick="openQuiz('practice')">
+        <span class="ic">✏️</span><span class="t"><h2>Luyện tập</h2><span>Làm thử, có gợi ý</span></span></button>
+      <button class="big-card g-coral" id="mode-test" onclick="openQuiz('test')">
+        <span class="ic">🏆</span><span class="t"><h2>Kiểm tra</h2><span>Làm bài và chấm điểm</span></span></button>
+    </div>
+  </section>
+
+  <!-- 5. BÀI HỌC -->
+  <section class="screen" id="s_learn">
+    <div class="learn-body" id="learnBody"></div>
+    <button class="actbtn next" id="learnNextBtn" style="margin-top:14px" onclick="afterLearn()">Luyện tập nào! ✏️</button>
+  </section>
+
+  <!-- 6. QUIZ -->
+  <section class="screen" id="s_quiz">
+    <div class="qbar">
+      <span class="mode-tag" id="modeTag">Luyện tập</span>
+      <div class="progress"><i id="bar"></i></div>
+      <span class="count" id="count">1/5</span>
+    </div>
+    <div class="qcard">
+      <div id="qbody"></div>
+      <div class="hintbox" id="hintbox"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="btnrow">
+        <button class="actbtn hint hidden" id="hintBtn" onclick="showHint()">💡 Gợi ý</button>
+        <button class="actbtn next hidden" id="nextBtn" onclick="nextQ()">Tiếp theo →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. KẾT QUẢ -->
+  <section class="screen" id="s_result">
+    <div class="result">
+      <div class="medal" id="medal">🏆</div>
+      <h2 id="rTitle">Xuất sắc!</h2>
+      <div class="msg" id="rMsg"></div>
+      <div class="scorebig"><span class="num" id="rScore">5</span>/<span id="rTotal">5</span> câu đúng</div>
+      <div class="stars-row" id="rStars">⭐⭐⭐</div>
+      <div class="rbtns">
+        <button class="rbtn p" onclick="restartQuiz()">Làm lại 🔁</button>
+        <button class="rbtn s" onclick="goToModes()">Quay lại bài 📖</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<script src="js/curriculum-data.js"></script>
+<script src="js/icons-data.js"></script>
+<script src="js/engine.js"></script>
+</body>
+</html>

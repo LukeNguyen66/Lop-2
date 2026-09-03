@@ -1,0 +1,10 @@
+{
+  "name": "be-hoc-gioi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "App học tập tương tác cho học sinh lớp 2 - Kết nối tri thức (Toán + Tiếng Việt)",
+  "scripts": {
+    "dev": "npx serve .",
+    "start": "npx serve ."
+  }
+}

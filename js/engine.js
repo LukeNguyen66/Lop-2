@@ -233,9 +233,9 @@ function mountScenecards(mountId, items){
       const src=IMAGE_ASSETS[it.sceneKey];
       const isVideo=/\.(mp4|webm|mov)$/i.test(src);
       const media=isVideo
-        ? `<video class="sc-img" src="${src}" autoplay loop muted playsinline></video>`
+        ? `<video class="sc-img" src="${src}" muted playsinline preload="metadata"></video><span class="sc-play">▶</span>`
         : `<img class="sc-img" src="${src}" alt="${it.word}">`;
-      html+=`<div class="sc-card" style="animation-delay:${i*90}ms" onclick="playScene('${id}')">
+      html+=`<div class="sc-card" style="animation-delay:${i*90}ms" onclick="playScene('${id}','${src}')">
         <div class="sc-stage" id="${id}">${media}</div>
         <span class="sc-wd">${it.word}</span>
         <span class="sc-tap">👆 Bấm để xem!</span>
@@ -255,12 +255,34 @@ function mountScenecards(mountId, items){
   });
   const el=document.getElementById(mountId); if(el) el.innerHTML=html;
 }
-function playScene(id){
+function playScene(id,videoSrc){
+  if(videoSrc){ openSceneVideo(videoSrc); return; }
   const el=document.getElementById(id); if(!el) return;
   el.style.animation='none';
   void el.offsetWidth;
   el.style.animation='scenePulse .8s ease';
   sCarry();
+}
+function openSceneVideo(src){
+  const modal=document.getElementById('videoModal');
+  const player=document.getElementById('videoModalPlayer');
+  if(!modal || !player) return;
+  if(player.getAttribute('src')!==src) player.setAttribute('src', src);
+  modal.classList.add('open');
+  player.currentTime=0;
+  player.play();
+  sCarry();
+}
+function toggleSceneVideo(v){
+  if(v.paused){ if(v.ended) v.currentTime=0; v.play(); } else { v.pause(); }
+}
+function closeSceneModal(e){
+  if(e && e.target.id!=='videoModal' && !e.target.classList.contains('video-modal-close')) return;
+  const modal=document.getElementById('videoModal');
+  const player=document.getElementById('videoModalPlayer');
+  if(!modal) return;
+  modal.classList.remove('open');
+  if(player) player.pause();
 }
 
 /* ===== ANIMATION CỘT DỌC (hỗ trợ cả CỘNG và TRỪ, 2 hoặc 3 chữ số) ===== */

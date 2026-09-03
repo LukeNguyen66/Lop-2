@@ -93,6 +93,13 @@
   </section>
 </div>
 
+<!-- MODAL XEM VIDEO CẢNH (dạy học, khám bệnh...) -->
+<div class="video-modal" id="videoModal" onclick="closeSceneModal(event)">
+  <div class="video-modal-box">
+    <button class="video-modal-close" onclick="closeSceneModal(event)">✕</button>
+    <video id="videoModalPlayer" class="video-modal-player" playsinline muted onclick="toggleSceneVideo(this)"></video>
+  </div>
+</div>
 
 <script src="js/curriculum-data.js"></script>
 <script src="js/icons-data.js"></script>

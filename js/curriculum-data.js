@@ -212,6 +212,36 @@ const CONTENT = {
         return {type:"fill", q:"Điền kết quả:", expr:`${n} × ${times}`, answer:n*times, hint:Array(times).fill(n).join('+')}; },
     ]
   },
+  /* Mục tra cứu/luyện riêng (KHÔNG nằm trong CURRICULUM.toan.chapters — không tính là 1 "Bài" SGK).
+     SGK Kết nối tri thức lớp 2 chỉ dạy chính thức Bảng nhân 2 và Bảng nhân 5 (Chủ đề 8);
+     đây là nội dung BỔ SUNG/MỞ RỘNG bố mẹ yêu cầu thêm cho đủ bảng 2-9, ghi rõ trong phần Học. */
+  bang_cuu_chuong: {
+    title:"Bảng cửu chương (2–9)",
+    learn:{ intro:"Đây là bảng nhân MỞ RỘNG từ 2 đến 9 để con luyện thuộc sớm. Lưu ý: sách giáo khoa lớp 2 (Kết nối tri thức) chỉ dạy chính thức Bảng nhân 2 và Bảng nhân 5 — các bảng còn lại (3,4,6,7,8,9) là phần bố mẹ bổ sung thêm, không phải nội dung trong sách.",
+      blocks:[
+        {type:"cuuchuong", nums:[2,3,4,5,6,7,8,9]},
+        {type:"example", html:"<b>Mẹo học thuộc:</b> Đọc to từng dòng nhiều lần: 'hai nhân một bằng hai, hai nhân hai bằng bốn...', rồi che kết quả lại và tự đoán trước khi xem đáp án."}
+      ]},
+    practice:[
+      {type:"fill", q:"Tính:", expr:"3 × 4", answer:12, hint:"3+3+3+3"},
+      {type:"mc", q:"6 × 2 = ?", options:["10","12","14","8"], answer:1, hint:"6+6"},
+      {type:"fill", q:"Tính:", expr:"7 × 3", answer:21, hint:"7+7+7"},
+    ],
+    test:[
+      {type:"fill", q:"Tính:", expr:"4 × 6", answer:24},
+      {type:"mc", q:"8 × 3 = ?", options:["24","21","27","18"], answer:0},
+      {type:"fill", q:"Tính:", expr:"9 × 4", answer:36},
+    ],
+    gen:[
+      ()=>{ const n=randInt(2,9), k=randInt(1,10);
+        return {type:"fill", q:"Tính:", expr:`${n} × ${k}`, answer:n*k, hint:Array(k).fill(n).join('+')}; },
+      ()=>{ const n=randInt(2,9), k=randInt(1,10); const correct=n*k;
+        const opts=distinctOptions(correct,3,()=>correct+(randInt(0,1)?1:-1)*randInt(1,5));
+        return {type:"mc", q:`${n} × ${k} = ?`, options:opts, answer:opts.indexOf(String(correct))}; },
+      ()=>{ const n=randInt(2,9), k=randInt(2,10);
+        return {type:"fill", q:`Mỗi hộp có ${n} chiếc bánh. ${k} hộp như thế có tất cả mấy chiếc bánh?`, answer:n*k, hint:`Tính ${n} × ${k}`}; },
+    ]
+  },
   knt_cong1000: {
     title:"Phép cộng (không nhớ) trong phạm vi 1000",
     learn:{ intro:"Khi cộng số có ba chữ số, ta đặt tính thẳng cột và cộng từ phải sang trái: đơn vị → chục → trăm.",

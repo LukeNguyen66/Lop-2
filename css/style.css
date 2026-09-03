@@ -61,6 +61,8 @@
   .row-card .go{font-size:19px; color:var(--blue);}
   .row-card.empty{opacity:.6;} .row-card.empty .num{background:#F0F0F3; color:var(--soft);}
   .row-card.empty .go{color:var(--soft);}
+  .row-card.cc-shortcut{background:linear-gradient(135deg,#EAF1FF,#F3EEFF); border:2px solid var(--blue); margin-bottom:14px;}
+  .row-card.cc-shortcut .num{background:var(--blue); color:#fff;}
 
   .chapter-head{font-size:15px; font-weight:800; color:var(--ink); margin:16px 4px 8px; display:flex; align-items:center; gap:8px;}
   .chapter-head .dot{width:10px; height:10px; border-radius:50%; background:var(--blue);}
@@ -171,6 +173,18 @@
   .video-modal-player{display:block; width:100%; max-height:80vh; border-radius:18px;}
   .video-modal-close{position:absolute; top:8px; right:8px; width:34px; height:34px; border-radius:50%; border:none;
     background:rgba(255,255,255,.9); color:#333; font-size:16px; font-weight:800; cursor:pointer; z-index:1;}
+
+  /* BẢNG CỬU CHƯƠNG — chọn số (tab), xem bảng nhân của số đó */
+  .cc-wrap{margin:12px 0;}
+  .cc-tabs{display:grid; grid-template-columns:repeat(8,1fr); gap:6px; margin-bottom:12px;}
+  .cc-tab{background:var(--white); border:2px solid var(--line); border-radius:10px; padding:8px 0; font-size:15px; font-weight:800;
+    color:var(--ink); cursor:pointer;}
+  .cc-tab.active{background:var(--blue); border-color:var(--blue); color:#fff;}
+  .cc-table{background:var(--white); border-radius:14px; padding:6px 14px; box-shadow:var(--shadow);}
+  .cc-row{display:flex; align-items:center; justify-content:space-between; padding:8px 0; font-size:15px; font-weight:700; color:var(--ink);
+    border-bottom:1px solid var(--line);}
+  .cc-row:last-child{border-bottom:none;}
+  .cc-row b{color:var(--blue); font-size:17px;}
 
   .example{border:2px dashed var(--mint); border-radius:14px; padding:14px; margin:12px 0; font-size:16px; line-height:1.6; animation:fadeSlide .45s ease;}
   .example b{color:var(--mint);}

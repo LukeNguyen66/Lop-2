@@ -33,6 +33,15 @@ function openSubject(sub){
   setCrumb(monName);
   document.getElementById('lessonsLabel').textContent=monName+' · Chọn bài';
   const wrap=document.getElementById('chapterList'); wrap.innerHTML='';
+  if(sub==='toan'){
+    const cc=document.createElement('button');
+    cc.className='row-card cc-shortcut';
+    cc.onclick=()=>openLesson('bang_cuu_chuong','Bảng cửu chương (2–9)');
+    cc.innerHTML=`<span class="num">✖️</span>
+      <span class="info"><h3>Bảng cửu chương (2–9)</h3><span>Tra cứu · Luyện tập nhanh</span></span>
+      <span class="go">›</span>`;
+    wrap.appendChild(cc);
+  }
   let lastTap=null;
   chapters.forEach((c)=>{
     // dải phân cách Tập 1 / Tập 2
@@ -103,6 +112,7 @@ function openLearn(){
     else if(b.type==='wordcards'){ html+=`<div class="wordcards-wrap" id="wordcardsMount_${idx}"></div>`; }
     else if(b.type==='actioncards'){ html+=`<div class="actioncards-wrap" id="actioncardsMount_${idx}"></div>`; }
     else if(b.type==='scenecards'){ html+=`<div class="scenecards-wrap" id="scenecardsMount_${idx}"></div>`; }
+    else if(b.type==='cuuchuong'){ html+=`<div class="cc-wrap" id="cuuchuongMount_${idx}"></div>`; }
   });
   document.getElementById('learnBody').innerHTML=html;
   // gắn animation nếu có
@@ -116,6 +126,7 @@ function openLearn(){
   L.blocks.forEach((b,idx)=>{ if(b.type==='wordcards') mountWordcards('wordcardsMount_'+idx, b.items); });
   L.blocks.forEach((b,idx)=>{ if(b.type==='actioncards') mountActioncards('actioncardsMount_'+idx, b.items); });
   L.blocks.forEach((b,idx)=>{ if(b.type==='scenecards') mountScenecards('scenecardsMount_'+idx, b.items); });
+  L.blocks.forEach((b,idx)=>{ if(b.type==='cuuchuong') mountCuuChuong('cuuchuongMount_'+idx, b.nums); });
   show('s_learn');
 }
 function afterLearn(){ if(curContent) openQuiz('practice'); }
@@ -283,6 +294,21 @@ function closeSceneModal(e){
   if(!modal) return;
   modal.classList.remove('open');
   if(player) player.pause();
+}
+
+/* ===== BẢNG CỬU CHƯƠNG (2-9) — chọn số, xem bảng nhân của số đó, kết quả tính bằng code ===== */
+function mountCuuChuong(mountId, nums){
+  const el=document.getElementById(mountId); if(!el) return;
+  const tabs=nums.map(n=>`<button class="cc-tab" data-n="${n}" onclick="ccPick('${mountId}',${n})">${n}</button>`).join('');
+  el.innerHTML=`<div class="cc-tabs">${tabs}</div><div class="cc-table" id="${mountId}_table"></div>`;
+  ccPick(mountId, nums[0]);
+}
+function ccPick(mountId, n){
+  const wrap=document.getElementById(mountId); if(!wrap) return;
+  wrap.querySelectorAll('.cc-tab').forEach(t=>t.classList.toggle('active', Number(t.dataset.n)===n));
+  const rows=Array.from({length:10},(_,i)=>i+1).map(k=>
+    `<div class="cc-row"><span>${n} × ${k}</span><b>${n*k}</b></div>`).join('');
+  document.getElementById(mountId+'_table').innerHTML=rows;
 }
 
 /* ===== ANIMATION CỘT DỌC (hỗ trợ cả CỘNG và TRỪ, 2 hoặc 3 chữ số) ===== */

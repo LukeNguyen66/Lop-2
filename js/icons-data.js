@@ -9,6 +9,7 @@ const IMAGE_ASSETS = {
   // "bác sĩ": "images/bacsi.png",       // wordcards/actioncards: khoá = chữ trong "word"
   // dayhoc: "images/dayhoc.png",         // scenecards: khoá = "sceneKey" (không có dấu ngoặc kép)
   // khambenh: "images/khambenh.png",
+  dayhoc: "images/dayhoc.mp4",           // video ảnh động AI thay cho cảnh ghép icon
 };
 
 

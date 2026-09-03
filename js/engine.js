@@ -230,8 +230,13 @@ function mountScenecards(mountId, items){
   items.forEach((it,i)=>{
     const id=mountId+'_sc'+i;
     if(IMAGE_ASSETS[it.sceneKey]){
+      const src=IMAGE_ASSETS[it.sceneKey];
+      const isVideo=/\.(mp4|webm|mov)$/i.test(src);
+      const media=isVideo
+        ? `<video class="sc-img" src="${src}" autoplay loop muted playsinline></video>`
+        : `<img class="sc-img" src="${src}" alt="${it.word}">`;
       html+=`<div class="sc-card" style="animation-delay:${i*90}ms" onclick="playScene('${id}')">
-        <div class="sc-stage" id="${id}"><img class="sc-img" src="${IMAGE_ASSETS[it.sceneKey]}" alt="${it.word}"></div>
+        <div class="sc-stage" id="${id}">${media}</div>
         <span class="sc-wd">${it.word}</span>
         <span class="sc-tap">👆 Bấm để xem!</span>
       </div>`;

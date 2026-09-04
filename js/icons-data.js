@@ -11,6 +11,12 @@ const IMAGE_ASSETS = {
   // khambenh: "images/khambenh.png",
   dayhoc: "images/dayhoc.mp4",           // video ảnh động AI thay cho cảnh ghép icon
   khambenh: "images/khambenh.mp4",       // video ảnh động AI thay cho cảnh ghép icon
+  "đi học": "images/dihoc.mp4",          // video ảnh động AI cho actioncards (1 người)
+  "ăn": "images/antao.mp4",
+  "quét nhà": "images/quetnha.mp4",
+  "chạy": "images/chay.mp4",
+  "nhảy": "images/nhay.mp4",
+  "bơi": "images/boi.mp4",
 };
 
 

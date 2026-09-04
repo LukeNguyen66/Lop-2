@@ -215,10 +215,15 @@ function mountActioncards(mountId, items){
   let html='';
   items.forEach((it,i)=>{
     const id=mountId+'_ic'+i;
-    const hasImg=!!IMAGE_ASSETS[it.word];
-    const iconContent = hasImg ? `<img class="emo-img" src="${IMAGE_ASSETS[it.word]}" alt="${it.word}">` : emo(it.icon);
-    const badge = (!hasImg && it.prop) ? `<span class="ic-badge">${emo(it.prop)}</span>` : '';
-    html+=`<div class="ac-card" style="animation-delay:${i*90}ms" onclick="playAction('${id}','${it.anim}')">
+    const src=IMAGE_ASSETS[it.word];
+    const isVideo=!!src && /\.(mp4|webm|mov)$/i.test(src);
+    const hasImg=!!src && !isVideo;
+    const iconContent = isVideo
+      ? `<video class="emo-img" src="${src}" muted playsinline preload="metadata"></video><span class="ic-play">▶</span>`
+      : (hasImg ? `<img class="emo-img" src="${src}" alt="${it.word}">` : emo(it.icon));
+    const badge = (!hasImg && !isVideo && it.prop) ? `<span class="ic-badge">${emo(it.prop)}</span>` : '';
+    const click = isVideo ? `playAction('${id}','${it.anim}','${src}')` : `playAction('${id}','${it.anim}')`;
+    html+=`<div class="ac-card" style="animation-delay:${i*90}ms" onclick="${click}">
       <span class="ac-ic" id="${id}">${iconContent}${badge}</span>
       <span class="ac-wd">${it.word}</span>
       <span class="ac-tap">👆 Bấm để xem!</span>
@@ -226,7 +231,8 @@ function mountActioncards(mountId, items){
   });
   const el=document.getElementById(mountId); if(el) el.innerHTML=html;
 }
-function playAction(id, animName){
+function playAction(id, animName, videoSrc){
+  if(videoSrc){ openSceneVideo(videoSrc); return; }
   const el=document.getElementById(id); if(!el) return;
   el.style.animation='none';
   void el.offsetWidth; // ép trình duyệt vẽ lại để animation chạy lại được từ đầu

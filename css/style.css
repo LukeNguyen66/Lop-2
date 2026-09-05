@@ -188,6 +188,26 @@
   .cc-row:last-child{border-bottom:none;}
   .cc-row b{color:var(--blue); font-size:17px;}
 
+  /* NHÓM VẬT THỂ TRỰC QUAN — bể cá / cành chim, bấm nút để xem cộng/trừ diễn ra */
+  .gc-wrap{margin:12px 0;}
+  .gc-label{font-size:15px; font-weight:700; color:var(--ink); margin-bottom:10px; line-height:1.5;}
+  .gc-stage{min-height:100px; border-radius:16px; padding:14px; display:flex; flex-wrap:wrap; align-items:center;
+    gap:6px; margin-bottom:10px;}
+  .gc-tank{background:linear-gradient(180deg,#BEE3F8,#8ED0F0);}
+  .gc-branch{background:linear-gradient(180deg,#DCEFDA,#BFE3C7);}
+  .gc-icon{font-size:30px; width:38px; height:38px; display:flex; align-items:center; justify-content:center;
+    opacity:0; transform:scale(.4); animation:gcPopIn .4s ease forwards;}
+  .gc-icon.gc-new{filter:hue-rotate(130deg) saturate(1.4);}
+  .gc-icon.gc-leaving{animation:gcFlyOut .6s ease forwards;}
+  @keyframes gcPopIn{to{opacity:1; transform:scale(1);}}
+  @keyframes gcFlyOut{0%{opacity:1; transform:translate(0,0) scale(1);} 100%{opacity:0; transform:translate(46px,-54px) scale(.4);}}
+  .gc-btn{display:block; width:100%; background:var(--blue); color:#fff; border:none; border-radius:12px;
+    padding:12px; font-size:14.5px; font-weight:800; cursor:pointer;}
+  .gc-btn:active{transform:scale(.97);}
+  .gc-btn:disabled{opacity:.6; cursor:default;}
+  .gc-eq{margin-top:10px; font-size:26px; font-weight:900; text-align:center; color:var(--ink); opacity:0; transition:opacity .4s ease;}
+  .gc-eq.show{opacity:1;}
+
   .example{border:2px dashed var(--mint); border-radius:14px; padding:14px; margin:12px 0; font-size:16px; line-height:1.6; animation:fadeSlide .45s ease;}
   .example b{color:var(--mint);}
   .draft-badge{display:inline-block; background:#FFF3CD; color:#856404; font-size:11px; font-weight:800;

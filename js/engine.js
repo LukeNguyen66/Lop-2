@@ -113,6 +113,7 @@ function openLearn(){
     else if(b.type==='actioncards'){ html+=`<div class="actioncards-wrap" id="actioncardsMount_${idx}"></div>`; }
     else if(b.type==='scenecards'){ html+=`<div class="scenecards-wrap" id="scenecardsMount_${idx}"></div>`; }
     else if(b.type==='cuuchuong'){ html+=`<div class="cc-wrap" id="cuuchuongMount_${idx}"></div>`; }
+    else if(b.type==='groupcalc'){ html+=`<div class="gc-wrap" id="gcMount_${idx}"></div>`; }
   });
   document.getElementById('learnBody').innerHTML=html;
   // gắn animation nếu có
@@ -127,6 +128,7 @@ function openLearn(){
   L.blocks.forEach((b,idx)=>{ if(b.type==='actioncards') mountActioncards('actioncardsMount_'+idx, b.items); });
   L.blocks.forEach((b,idx)=>{ if(b.type==='scenecards') mountScenecards('scenecardsMount_'+idx, b.items); });
   L.blocks.forEach((b,idx)=>{ if(b.type==='cuuchuong') mountCuuChuong('cuuchuongMount_'+idx, b.nums); });
+  L.blocks.forEach((b,idx)=>{ if(b.type==='groupcalc') mountGroupCalc('gcMount_'+idx, b); });
   show('s_learn');
 }
 function afterLearn(){ if(curContent) openQuiz('practice'); }
@@ -315,6 +317,63 @@ function ccPick(mountId, n){
   const rows=Array.from({length:10},(_,i)=>i+1).map(k=>
     `<div class="cc-row"><span>${n} × ${k}</span><b>${n*k}</b></div>`).join('');
   document.getElementById(mountId+'_table').innerHTML=rows;
+}
+
+/* ===== NHÓM VẬT THỂ TRỰC QUAN (bể cá, cành chim...) — bấm nút để xem cộng/trừ diễn ra thật =====
+   op:"+" thêm delta con (màu khác, hiệu ứng xuất hiện); op:"-" bớt delta con (bay/biến mất). */
+const GC_CFG={}, GC_PLAYED={};
+function mountGroupCalc(mountId, cfg){
+  GC_CFG[mountId]=cfg; GC_PLAYED[mountId]=false;
+  const el=document.getElementById(mountId); if(!el) return;
+  const stageCls = cfg.scene==='tank' ? 'gc-tank' : 'gc-branch';
+  const btnLabel = cfg.op==='+' ? `👆 Bấm để xem thêm ${cfg.delta} con!` : `👆 Bấm để xem ${cfg.delta} con bay đi!`;
+  el.innerHTML = `<div class="gc-label">${emo(cfg.text)}</div>
+    <div class="gc-stage ${stageCls}" id="${mountId}_stage"></div>
+    <button class="gc-btn" id="${mountId}_btn" onclick="gcPlay('${mountId}')">${btnLabel}</button>
+    <div class="gc-eq" id="${mountId}_eq"></div>`;
+  gcReset(mountId);
+}
+function gcReset(mountId){
+  const cfg=GC_CFG[mountId];
+  const stage=document.getElementById(mountId+'_stage'); if(!stage) return;
+  stage.innerHTML = Array.from({length:cfg.start}).map(()=>`<span class="gc-icon">${emo(cfg.icon)}</span>`).join('');
+  const eq=document.getElementById(mountId+'_eq'); if(eq){ eq.textContent=''; eq.classList.remove('show'); }
+  GC_PLAYED[mountId]=false;
+}
+function gcPlay(mountId){
+  const cfg=GC_CFG[mountId]; if(!cfg) return;
+  const btn=document.getElementById(mountId+'_btn');
+  if(GC_PLAYED[mountId]){ gcReset(mountId); }
+  const stage=document.getElementById(mountId+'_stage'); if(!stage) return;
+  if(btn) btn.disabled=true;
+  if(cfg.op==='+'){
+    const total=cfg.start+cfg.delta;
+    for(let i=0;i<cfg.delta;i++){
+      const span=document.createElement('span');
+      span.className='gc-icon gc-new';
+      span.style.animationDelay=(i*160)+'ms';
+      span.innerHTML=emo(cfg.deltaIcon||cfg.icon);
+      stage.appendChild(span);
+    }
+    sCarry();
+    setTimeout(()=>{
+      const eq=document.getElementById(mountId+'_eq');
+      if(eq){ eq.textContent=`${cfg.start} + ${cfg.delta} = ${total}`; eq.classList.add('show'); }
+      sWin(); GC_PLAYED[mountId]=true; if(btn) btn.disabled=false;
+    }, cfg.delta*160+500);
+  } else {
+    const icons=[...stage.querySelectorAll('.gc-icon')];
+    const leaving=icons.slice(-cfg.delta);
+    leaving.forEach((ic,i)=>{ ic.style.animationDelay=(i*160)+'ms'; ic.classList.add('gc-leaving'); });
+    sStep();
+    setTimeout(()=>{
+      leaving.forEach(ic=>ic.remove());
+      const result=cfg.start-cfg.delta;
+      const eq=document.getElementById(mountId+'_eq');
+      if(eq){ eq.textContent=`${cfg.start} − ${cfg.delta} = ${result}`; eq.classList.add('show'); }
+      sWin(); GC_PLAYED[mountId]=true; if(btn) btn.disabled=false;
+    }, cfg.delta*160+700);
+  }
 }
 
 /* ===== ANIMATION CỘT DỌC (hỗ trợ cả CỘNG và TRỪ, 2 hoặc 3 chữ số) ===== */

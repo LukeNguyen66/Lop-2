@@ -431,9 +431,11 @@ const CONTENT = {
     title:"Các thành phần của phép cộng, phép trừ",
     learn:{ intro:"Trong phép cộng có số hạng và tổng: Số hạng + Số hạng = Tổng. Trong phép trừ có số bị trừ, số trừ và hiệu: Số bị trừ − Số trừ = Hiệu.",
       blocks:[
-        {type:"concept", text:"Bể có 6 con cá, thêm 3 con cá nữa:", big:"6 + 3 = 9"},
+        {type:"groupcalc", op:"+", start:6, delta:3, icon:"🐟", deltaIcon:"🐟", scene:"tank",
+          text:"Bể có 6 con cá, thêm 3 con cá nữa:"},
         {type:"example", html:"<b>6</b> và <b>3</b> là số hạng, <b>9</b> là tổng."},
-        {type:"concept", text:"Cành cây có 12 con chim, bay đi 2 con:", big:"12 − 2 = 10"},
+        {type:"groupcalc", op:"-", start:12, delta:2, icon:"🐦", scene:"branch",
+          text:"Cành cây có 12 con chim, bay đi 2 con:"},
         {type:"example", html:"<b>12</b> là số bị trừ, <b>2</b> là số trừ, <b>10</b> là hiệu."}
       ]},
     practice:[

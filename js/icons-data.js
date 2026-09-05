@@ -17,6 +17,40 @@ const IMAGE_ASSETS = {
   "chạy": "images/chay.mp4",
   "nhảy": "images/nhay.mp4",
   "bơi": "images/boi.mp4",
+
+  // --- Đợt 1 ---
+  "g — con gà": "images/g.png",
+  "cặp sách": "images/capsach.png",
+  "cô giáo": "images/cogiao.png",
+  "bác sĩ": "images/bacsi.png",
+  "chim": "images/chim.png",
+  "chợ": "images/cho.png",
+  "đen láy": "images/denlay.png",
+  "cao": "images/cao.png",
+  "học sinh": "images/hocsinh.png",
+
+  // --- Đợt 2 ---
+  "ngoan": "images/ngoan.png",
+  "đỏ": "images/do.png",
+  "trâu": "images/trau.png",
+  "trứng": "images/trung.png",
+  "trường học": "images/truonghoc.png",
+  "trăng": "images/trang.png",
+  "chân": "images/chan.png",
+  "cha": "images/cha.png",
+  "sách": "images/sach.png",
+  "sông": "images/song.png",
+  "sao": "images/sao.png",
+  "sư tử": "images/sutu.png",
+  "xanh": "images/xanh.png",
+  "xe đạp": "images/xedap.png",
+  "xôi": "images/xoi.png",
+  "xa": "images/xa.png",
+  "a — quả táo": "images/a.png",
+  "b — quả bóng": "images/b.png",
+  "c — con cá": "images/c.png",
+  "d — con dê": "images/d.png",
+  "e — con ếch": "images/e.png",
 };
 
 

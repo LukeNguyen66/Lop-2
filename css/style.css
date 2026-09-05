@@ -208,6 +208,30 @@
   .gc-eq{margin-top:10px; font-size:26px; font-weight:900; text-align:center; color:var(--ink); opacity:0; transition:opacity .4s ease;}
   .gc-eq.show{opacity:1;}
 
+  /* FLIPBOOK — bai Hoc nhieu trang, lat trang co hieu ung 3D */
+  .fb-wrap{margin:8px 0;}
+  .fb-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
+  .fb-arrow{background:var(--blue); color:#fff; border:none; width:38px; height:38px; border-radius:50%;
+    font-size:19px; font-weight:900; cursor:pointer; flex-shrink:0; line-height:1;}
+  .fb-arrow:active{transform:scale(.92);}
+  .fb-arrow:disabled{opacity:.3; cursor:default;}
+  .fb-dots{display:flex; gap:6px;}
+  .fb-dot{width:8px; height:8px; border-radius:50%; background:var(--line);}
+  .fb-dot.active{background:var(--blue);}
+  .fb-stage{perspective:1400px;}
+  .fb-page{background:var(--white); border-radius:18px; padding:16px; box-shadow:var(--shadow);
+    transform-style:preserve-3d; transform-origin:center;}
+  .fb-pagehead{font-size:12.5px; font-weight:800; color:var(--soft); text-transform:uppercase;
+    letter-spacing:.3px; margin-bottom:10px;}
+  .fb-out-next{animation:fbOutNext .26s ease forwards;}
+  .fb-in-next{animation:fbInNext .26s ease forwards;}
+  .fb-out-prev{animation:fbOutPrev .26s ease forwards;}
+  .fb-in-prev{animation:fbInPrev .26s ease forwards;}
+  @keyframes fbOutNext{from{transform:rotateY(0deg); opacity:1;} to{transform:rotateY(-95deg); opacity:.35;}}
+  @keyframes fbInNext{from{transform:rotateY(95deg); opacity:.35;} to{transform:rotateY(0deg); opacity:1;}}
+  @keyframes fbOutPrev{from{transform:rotateY(0deg); opacity:1;} to{transform:rotateY(95deg); opacity:.35;}}
+  @keyframes fbInPrev{from{transform:rotateY(-95deg); opacity:.35;} to{transform:rotateY(0deg); opacity:1;}}
+
   .example{border:2px dashed var(--mint); border-radius:14px; padding:14px; margin:12px 0; font-size:16px; line-height:1.6; animation:fadeSlide .45s ease;}
   .example b{color:var(--mint);}
   .draft-badge{display:inline-block; background:#FFF3CD; color:#856404; font-size:11px; font-weight:800;

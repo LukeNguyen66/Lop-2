@@ -101,8 +101,19 @@ function openLearn(){
   }
   document.getElementById('learnNextBtn').style.display='block';
   const L=curContent.learn;
+  if(L.pages){ mountFlipbook(L); show('s_learn'); return; }
   let html=`<h2>${curContent.title} <span class="draft-badge">bản nháp</span></h2><div class="lead">${L.intro}</div>`;
-  L.blocks.forEach((b,idx)=>{
+  html+=renderBlocksHtml(L.blocks);
+  document.getElementById('learnBody').innerHTML=html;
+  mountBlocksInteractive(L.blocks);
+  show('s_learn');
+}
+function afterLearn(){ if(curContent) openQuiz('practice'); }
+
+/* ===== RENDER/MOUNT DÙNG CHUNG CHO 1 MẢNG blocks (dùng cho bài thường lẫn từng trang flipbook) ===== */
+function renderBlocksHtml(blocks){
+  let html='';
+  blocks.forEach((b,idx)=>{
     if(b.type==='concept'){ html+=`<div class="concept"><p>${emo(b.text)}</p>`; if(b.big) html+=`<div class="big">${b.big}</div>`; html+=`</div>`; }
     else if(b.type==='example'){ html+=`<div class="example">${emo(b.html)}</div>`; }
     else if(b.type==='vcalc'){ html+=`<div class="vcalc-wrap" id="vcalcMount"></div>`; }
@@ -115,23 +126,65 @@ function openLearn(){
     else if(b.type==='cuuchuong'){ html+=`<div class="cc-wrap" id="cuuchuongMount_${idx}"></div>`; }
     else if(b.type==='groupcalc'){ html+=`<div class="gc-wrap" id="gcMount_${idx}"></div>`; }
   });
-  document.getElementById('learnBody').innerHTML=html;
-  // gắn animation nếu có
-  if(L.blocks.some(b=>b.type==='vcalc')) mountVCalc();
-  const nlBlock=L.blocks.find(b=>b.type==='numline');
-  if(nlBlock) mountNumline(nlBlock.center);
-  const cmpBlock=L.blocks.find(b=>b.type==='compare');
-  if(cmpBlock) mountCompare(cmpBlock);
-  const barBlock=L.blocks.find(b=>b.type==='barcompare');
-  if(barBlock) mountBarcompare(barBlock.items);
-  L.blocks.forEach((b,idx)=>{ if(b.type==='wordcards') mountWordcards('wordcardsMount_'+idx, b.items); });
-  L.blocks.forEach((b,idx)=>{ if(b.type==='actioncards') mountActioncards('actioncardsMount_'+idx, b.items); });
-  L.blocks.forEach((b,idx)=>{ if(b.type==='scenecards') mountScenecards('scenecardsMount_'+idx, b.items); });
-  L.blocks.forEach((b,idx)=>{ if(b.type==='cuuchuong') mountCuuChuong('cuuchuongMount_'+idx, b.nums); });
-  L.blocks.forEach((b,idx)=>{ if(b.type==='groupcalc') mountGroupCalc('gcMount_'+idx, b); });
-  show('s_learn');
+  return html;
 }
-function afterLearn(){ if(curContent) openQuiz('practice'); }
+function mountBlocksInteractive(blocks){
+  if(blocks.some(b=>b.type==='vcalc')) mountVCalc();
+  const nlBlock=blocks.find(b=>b.type==='numline'); if(nlBlock) mountNumline(nlBlock.center);
+  const cmpBlock=blocks.find(b=>b.type==='compare'); if(cmpBlock) mountCompare(cmpBlock);
+  const barBlock=blocks.find(b=>b.type==='barcompare'); if(barBlock) mountBarcompare(barBlock.items);
+  blocks.forEach((b,idx)=>{ if(b.type==='wordcards') mountWordcards('wordcardsMount_'+idx, b.items); });
+  blocks.forEach((b,idx)=>{ if(b.type==='actioncards') mountActioncards('actioncardsMount_'+idx, b.items); });
+  blocks.forEach((b,idx)=>{ if(b.type==='scenecards') mountScenecards('scenecardsMount_'+idx, b.items); });
+  blocks.forEach((b,idx)=>{ if(b.type==='cuuchuong') mountCuuChuong('cuuchuongMount_'+idx, b.nums); });
+  blocks.forEach((b,idx)=>{ if(b.type==='groupcalc') mountGroupCalc('gcMount_'+idx, b); });
+}
+
+/* ===== FLIPBOOK — bài Học nhiều trang, mỗi trang ôn 1 bài, lật trang có hiệu ứng ===== */
+let FB_STATE=null;
+function mountFlipbook(L){
+  FB_STATE={ idx:0, pages:L.pages, animating:false };
+  const html=`<h2>${curContent.title} <span class="draft-badge">bản nháp</span></h2><div class="lead">${emo(L.intro)}</div>
+    <div class="fb-wrap">
+      <div class="fb-nav">
+        <button class="fb-arrow" id="fbPrev" onclick="fbTurn(-1)">‹</button>
+        <div class="fb-dots" id="fbDots"></div>
+        <button class="fb-arrow" id="fbNext" onclick="fbTurn(1)">›</button>
+      </div>
+      <div class="fb-stage"><div class="fb-page" id="fbPage"></div></div>
+    </div>`;
+  document.getElementById('learnBody').innerHTML=html;
+  renderFbPage();
+}
+function renderFbPage(){
+  const {idx,pages}=FB_STATE;
+  const page=pages[idx];
+  const el=document.getElementById('fbPage'); if(!el) return;
+  el.innerHTML = `<div class="fb-pagehead">Trang ${idx+1}/${pages.length} · ${page.title}</div>` + renderBlocksHtml(page.blocks);
+  mountBlocksInteractive(page.blocks);
+  document.getElementById('fbDots').innerHTML = pages.map((p,i)=>`<span class="fb-dot${i===idx?' active':''}"></span>`).join('');
+  document.getElementById('fbPrev').disabled = idx===0;
+  document.getElementById('fbNext').disabled = idx===pages.length-1;
+}
+function fbTurn(dir){
+  if(!FB_STATE || FB_STATE.animating) return;
+  const nextIdx=FB_STATE.idx+dir;
+  if(nextIdx<0 || nextIdx>=FB_STATE.pages.length) return;
+  FB_STATE.animating=true;
+  const el=document.getElementById('fbPage');
+  el.classList.add(dir>0?'fb-out-next':'fb-out-prev');
+  sStep();
+  setTimeout(()=>{
+    FB_STATE.idx=nextIdx;
+    renderFbPage();
+    el.classList.remove('fb-out-next','fb-out-prev');
+    el.classList.add(dir>0?'fb-in-next':'fb-in-prev');
+    setTimeout(()=>{
+      el.classList.remove('fb-in-next','fb-in-prev');
+      FB_STATE.animating=false;
+    },260);
+  },260);
+}
 
 /* ===== ANIMATION TIA SỐ: số liền trước / số liền sau ===== */
 function mountNumline(center){

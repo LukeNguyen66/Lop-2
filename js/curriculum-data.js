@@ -525,10 +525,31 @@ const CONTENT = {
   },
   knt_luyentapchung1: {
     title:"Luyện tập chung (Chủ đề 1)",
-    learn:{ intro:"Bài luyện tập chung giúp con ôn lại các kĩ năng đã học ở Chủ đề 1: đọc viết số, tia số, số liền trước/sau, thành phần phép cộng-trừ, hơn kém nhau.",
-      blocks:[
-        {type:"concept", text:"Ôn viết số thành tổng:", big:"56 = 50 + 6"},
-        {type:"example", html:"<b>Ôn số liền trước/sau:</b> Số liền trước của 40 là 39. Số liền sau của 40 là 41."}
+    learn:{ intro:"Lật từng trang để ôn lại 5 bài đã học ở Chủ đề 1 nhé!",
+      pages:[
+        { title:"Bài 1. Ôn tập các số đến 100", blocks:[
+          {type:"concept", text:"Ôn viết số thành tổng chục và đơn vị:", big:"56 = 50 + 6"},
+          {type:"barcompare", items:[{n:58},{n:51},{n:49},{n:50}]},
+          {type:"example", html:"<b>Ghi nhớ:</b> Số có 2 chữ số = (số chục × 10) + số đơn vị."}
+        ]},
+        { title:"Bài 2. Tia số. Số liền trước, số liền sau", blocks:[
+          {type:"numline", center:4},
+          {type:"example", html:"<b>Ghi nhớ:</b> Số liền trước kém số đã cho 1 đơn vị. Số liền sau hơn số đã cho 1 đơn vị."}
+        ]},
+        { title:"Bài 3. Các thành phần của phép cộng, phép trừ", blocks:[
+          {type:"groupcalc", op:"+", start:6, delta:3, icon:"🐟", deltaIcon:"🐟", scene:"tank",
+            text:"Bể có 6 con cá, thêm 3 con cá nữa:"},
+          {type:"example", html:"<b>6</b> và <b>3</b> là số hạng, <b>9</b> là tổng."}
+        ]},
+        { title:"Bài 4. Hơn, kém nhau bao nhiêu", blocks:[
+          {type:"compare", a:10, b:7, labelA:"Gà", labelB:"Vịt", iconA:"🐓", iconB:"🦆"},
+          {type:"example", html:"<b>Ghi nhớ:</b> Muốn biết số này hơn (hoặc kém) số kia bao nhiêu, ta lấy số lớn trừ số bé."}
+        ]},
+        { title:"Bài 5. Ôn tập phép cộng, phép trừ (không nhớ)", blocks:[
+          {type:"concept", text:"Ôn phép cộng không nhớ:", big:"35 + 42 = 77"},
+          {type:"concept", text:"Ôn phép trừ không nhớ:", big:"68 − 6 = 62"},
+          {type:"example", html:"<b>Ghi nhớ:</b> Cộng/trừ không nhớ: tính cột đơn vị trước, rồi đến cột chục."}
+        ]},
       ]},
     practice:[
       {type:"fill", q:"Số liền sau của 21 là", answer:22},

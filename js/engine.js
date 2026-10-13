@@ -125,6 +125,10 @@ function renderBlocksHtml(blocks){
     else if(b.type==='scenecards'){ html+=`<div class="scenecards-wrap" id="scenecardsMount_${idx}"></div>`; }
     else if(b.type==='cuuchuong'){ html+=`<div class="cc-wrap" id="cuuchuongMount_${idx}"></div>`; }
     else if(b.type==='groupcalc'){ html+=`<div class="gc-wrap" id="gcMount_${idx}"></div>`; }
+    else if(b.type==='groupviz'){ html+=`<div class="gv-wrap" id="gvMount_${idx}"></div>`; }
+    else if(b.type==='placevalue'){ html+=`<div class="pv-wrap" id="pvMount_${idx}"></div>`; }
+    else if(b.type==='pictochart'){ html+=`<div class="pc-wrap" id="pcMount_${idx}"></div>`; }
+    else if(b.type==='ruler'){ html+=`<div class="ru-wrap" id="ruMount_${idx}"></div>`; }
   });
   return html;
 }
@@ -138,6 +142,119 @@ function mountBlocksInteractive(blocks){
   blocks.forEach((b,idx)=>{ if(b.type==='scenecards') mountScenecards('scenecardsMount_'+idx, b.items); });
   blocks.forEach((b,idx)=>{ if(b.type==='cuuchuong') mountCuuChuong('cuuchuongMount_'+idx, b.nums); });
   blocks.forEach((b,idx)=>{ if(b.type==='groupcalc') mountGroupCalc('gcMount_'+idx, b); });
+  blocks.forEach((b,idx)=>{ if(b.type==='groupviz') mountGroupViz('gvMount_'+idx, b); });
+  blocks.forEach((b,idx)=>{ if(b.type==='placevalue') mountPlaceValue('pvMount_'+idx, b); });
+  blocks.forEach((b,idx)=>{ if(b.type==='pictochart') mountPictoChart('pcMount_'+idx, b); });
+  blocks.forEach((b,idx)=>{ if(b.type==='ruler') mountRuler('ruMount_'+idx, b); });
+}
+
+/* ===== NHÓM ĐỒ VẬT: PHÉP NHÂN (xếp vào từng nhóm) / PHÉP CHIA (chia đều vào đĩa) =====
+   mode:"mul" {groups, per, icon}  |  mode:"div" {total, icon, groups} hoặc {total, icon, per} */
+const GV_CFG={}, GV_PLAYED={};
+function gvGroupCount(cfg){ return cfg.mode==='mul' ? cfg.groups : (cfg.groups || cfg.total/cfg.per); }
+function mountGroupViz(mountId,cfg){
+  GV_CFG[mountId]=cfg; GV_PLAYED[mountId]=false;
+  const el=document.getElementById(mountId); if(!el) return;
+  const label = cfg.mode==='mul' ? '👆 Bấm để xếp vào từng nhóm!' : '👆 Bấm để chia đều!';
+  el.innerHTML=`<div class="gc-label">${emo(cfg.text)}</div>
+    <div class="gv-stage" id="${mountId}_stage"></div>
+    <button class="gc-btn" id="${mountId}_btn" onclick="gvPlay('${mountId}')">${label}</button>
+    <div class="gc-eq" id="${mountId}_eq"></div>`;
+  gvReset(mountId);
+}
+function gvReset(mountId){
+  const cfg=GV_CFG[mountId]; const stage=document.getElementById(mountId+'_stage'); if(!stage) return;
+  const g=gvGroupCount(cfg);
+  let html='';
+  if(cfg.mode==='div'){
+    html+=`<div class="gv-pool">`+Array.from({length:cfg.total},(_,i)=>`<span class="gv-ic" id="${mountId}_p${i}">${emo(cfg.icon)}</span>`).join('')+`</div>`;
+  }
+  const dyn = cfg.mode==='div' && !cfg.groups;   // chia theo "mỗi đĩa per cái": đĩa xuất hiện dần, không lộ đáp án
+  html+=`<div class="gv-plates" id="${mountId}_plates">`+(dyn?'':Array.from({length:g},(_,i)=>`<div class="gv-plate" id="${mountId}_g${i}"></div>`).join(''))+`</div>`;
+  stage.innerHTML=html;
+  const eq=document.getElementById(mountId+'_eq'); if(eq){ eq.innerHTML=''; eq.classList.remove('show'); }
+  GV_PLAYED[mountId]=false;
+}
+function gvPlay(mountId){
+  const cfg=GV_CFG[mountId]; if(!cfg) return;
+  if(GV_PLAYED[mountId]) gvReset(mountId);
+  const btn=document.getElementById(mountId+'_btn'); if(btn) btn.disabled=true;
+  const g=gvGroupCount(cfg);
+  const step=cfg.mode==='mul' ? 150 : 170;
+  const dyn = cfg.mode==='div' && !cfg.groups;
+  const put=(gi)=>{ let pl=document.getElementById(mountId+'_g'+gi);
+    if(!pl && dyn){ const wrap=document.getElementById(mountId+'_plates'); if(!wrap) return;
+      pl=document.createElement('div'); pl.className='gv-plate'; pl.id=mountId+'_g'+gi; wrap.appendChild(pl); }
+    if(!pl) return;
+    const s=document.createElement('span'); s.className='gv-ic gv-new'; s.innerHTML=emo(cfg.icon); pl.appendChild(s); sStep(); };
+  let n=0, total;
+  if(cfg.mode==='mul'){
+    total=g*cfg.per;
+    for(let gi=0; gi<g; gi++){ for(let k=0;k<cfg.per;k++){ const gi2=gi; setTimeout(()=>put(gi2), n*step); n++; } }
+  } else {
+    total=cfg.total;
+    for(let i=0;i<total;i++){
+      setTimeout(()=>{ const src=document.getElementById(mountId+'_p'+i); if(src) src.style.visibility='hidden'; put(dyn?Math.floor(i/cfg.per):i%g); }, i*step);
+    }
+    n=total;
+  }
+  setTimeout(()=>{
+    const eq=document.getElementById(mountId+'_eq'); if(!eq) return;
+    if(cfg.mode==='mul') eq.innerHTML=`${Array(g).fill(cfg.per).join(' + ')} = ${total}<br>${cfg.per} × ${g} = ${total}`;
+    else eq.innerHTML = cfg.groups ? `${total} : ${g} = ${total/g}` : `${total} : ${cfg.per} = ${g}`;
+    eq.classList.add('show'); sWin(); GV_PLAYED[mountId]=true; if(btn) btn.disabled=false;
+  }, n*step+500);
+}
+
+/* ===== HÀNG TRĂM – CHỤC – ĐƠN VỊ (bấm +/− để tự dựng số) ===== */
+const PV_STATE={};
+function mountPlaceValue(mountId,cfg){
+  PV_STATE[mountId]={h:cfg.h||0,t:cfg.t||0,u:cfg.u||0,th:cfg.th||0,thousand:!!cfg.thousand,fixed:!!cfg.fixed};
+  const el=document.getElementById(mountId); if(!el) return;
+  el.innerHTML=`${cfg.text?`<div class="gc-label">${emo(cfg.text)}</div>`:''}<div class="pv-cols" id="${mountId}_cols"></div><div class="pv-read" id="${mountId}_read"></div>`;
+  pvRender(mountId);
+}
+function pvRender(mountId){
+  const s=PV_STATE[mountId]; const cols=document.getElementById(mountId+'_cols'); if(!cols) return;
+  const defs=[];
+  if(s.thousand) defs.push({k:'th',name:'Nghìn',cls:'pv-th'});
+  defs.push({k:'h',name:'Trăm',cls:'pv-h'},{k:'t',name:'Chục',cls:'pv-t'},{k:'u',name:'Đơn vị',cls:'pv-u'});
+  cols.innerHTML=defs.map(d=>{
+    const v=s[d.k];
+    const items=Array.from({length:v},()=>`<span class="${d.cls}"></span>`).join('');
+    const ctrl=s.fixed?'':`<div class="pv-ctrl"><button onclick="pvStep('${mountId}','${d.k}',-1)">−</button><button onclick="pvStep('${mountId}','${d.k}',1)">+</button></div>`;
+    return `<div class="pv-col"><div class="pv-name">${d.name}</div><div class="pv-items">${items}</div><div class="pv-num">${v}</div>${ctrl}</div>`;
+  }).join('');
+  const n=s.th*1000+s.h*100+s.t*10+s.u;
+  const parts=[];
+  if(s.thousand&&s.th) parts.push(`${s.th} nghìn`);
+  if(s.h) parts.push(`${s.h} trăm`); if(s.t) parts.push(`${s.t} chục`); if(s.u) parts.push(`${s.u} đơn vị`);
+  document.getElementById(mountId+'_read').innerHTML=`Số: <b>${n}</b>${parts.length?' = '+parts.join(' '):''}`;
+}
+function pvStep(mountId,k,d){
+  const s=PV_STATE[mountId]; const max=(k==='th')?1:9;
+  const v=s[k]+d; if(v<0||v>max) return;
+  s[k]=v;
+  if(s.thousand){ if(k==='th' && v===1){ s.h=s.t=s.u=0; } else if(k!=='th' && s.th===1){ s[k]=0; } }
+  sStep(); pvRender(mountId);
+}
+
+/* ===== BIỂU ĐỒ TRANH (mỗi hàng 1 loại, số hình = số lượng) ===== */
+function mountPictoChart(mountId,cfg){
+  const el=document.getElementById(mountId); if(!el) return;
+  const rows=cfg.rows.map(r=>`<div class="cmp-row"><span class="cmp-label">${r.label}</span><div class="cmp-icons">`+
+    Array.from({length:r.n},(_,i)=>`<span class="cmp-ic" style="animation-delay:${i*50}ms">${emo(r.icon)}</span>`).join('')+`</div></div>`).join('');
+  el.innerHTML=`${cfg.title?`<div class="gc-label">${emo(cfg.title)}</div>`:''}${rows}${cfg.note?`<div class="pc-note">${emo(cfg.note)}</div>`:''}`;
+}
+
+/* ===== THƯỚC KẺ: đoạn từ vạch start đến vạch end ===== */
+function mountRuler(mountId,cfg){
+  const el=document.getElementById(mountId); if(!el) return;
+  const max=cfg.max||15, a=cfg.start, b=cfg.end;
+  let track='<div class="ru-track">';
+  for(let i=0;i<=max;i++){ track+=`<div class="ru-tick${(i>=a&&i<=b)?' in':''}${(i===a||i===b)?' edge':''}">${i}</div>`; }
+  track+='</div>';
+  el.innerHTML=`${cfg.text?`<div class="gc-label">${emo(cfg.text)}</div>`:''}${track}<div class="gc-eq show" style="font-size:18px">${b} − ${a} = ${b-a} (${cfg.unit||'cm'})</div>`;
 }
 
 /* ===== FLIPBOOK — bài Học nhiều trang, mỗi trang ôn 1 bài, lật trang có hiệu ứng ===== */
@@ -251,14 +368,17 @@ function mountBarcompare(items){
 }
 
 /* ===== THẺ TỪ VỰNG CÓ HÌNH MINH HỌA ===== */
+const isVideoSrc=src=>!!src && /\.(mp4|webm|mov)$/i.test(src);
+function staticImg(word){ const a=IMAGE_ASSETS[word]; return (a && !isVideoSrc(a)) ? a : null; }
 function iconHtml(it){
-  if(IMAGE_ASSETS[it.word]) return `<img class="emo-img" src="${IMAGE_ASSETS[it.word]}" alt="${it.word}">`;
+  const img=staticImg(it.word);
+  if(img) return `<img class="emo-img" src="${img}" alt="${it.word}">`;
   return it.custom ? (CUSTOM_ICONS[it.custom] ? `<span class="emo-ic">${CUSTOM_ICONS[it.custom]}</span>` : '') : emo(it.icon);
 }
 function mountWordcards(mountId, items){
   let html='';
   items.forEach((it,i)=>{
-    const hasImg=!!IMAGE_ASSETS[it.word];
+    const hasImg=!!staticImg(it.word);
     const badge = (!hasImg && it.icon2) ? `<span class="ic-badge">${emo(it.icon2)}</span>` : '';
     html+=`<div class="wc-card" style="animation-delay:${i*90}ms"><span class="ic">${iconHtml(it)}${badge}</span><span class="wd">${it.word}</span></div>`;
   });
@@ -608,7 +728,7 @@ function renderQ(){
 function renderMC(q){
   const L=['A','B','C','D'];
   let html=`<div class="qtext">${q.q}</div>`;
-  if(q.visual) html+=`<div class="qvisual">${emo(q.visual)}</div>`;
+  if(q.visual) html+=`<div class="qvisual${q.vsmall?' sm':''}">${emo(q.visual)}</div>`;
   html+=`<div class="opts ${q.two?'two':''}" id="opts">`;
   q.options.forEach((o,i)=>{ html+=`<button class="opt" onclick="pickMC(${i})">${q.two?'':`<span class="letter">${L[i]}</span>`}${o}</button>`; });
   return html+`</div>`;
@@ -624,7 +744,7 @@ function renderFill(q,body){
   fillVal='';
   let html=`<div class="qtext">${q.q}</div>`;
   if(q.expr) html+=`<div class="qbig">${q.expr} = ?</div>`;
-  if(q.visual) html+=`<div class="qvisual">${emo(q.visual)}</div>`;
+  if(q.visual) html+=`<div class="qvisual${q.vsmall?' sm':''}">${emo(q.visual)}</div>`;
   html+=`<div style="text-align:center;margin:14px 0"><span style="display:inline-block;min-width:110px;border-bottom:4px solid var(--blue);font-size:34px;font-weight:800;padding:4px 12px;color:var(--blue)" id="slot">?</span></div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:290px;margin:12px auto 0">`;
   [1,2,3,4,5,6,7,8,9].forEach(n=>html+=`<button class="opt" style="justify-content:center;padding:16px" onclick="tapKey('${n}')">${n}</button>`);

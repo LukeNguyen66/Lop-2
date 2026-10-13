@@ -5,6 +5,30 @@
 
 ## TRẠNG THÁI HIỆN TẠI
 
+**🆕 GIAI ĐOẠN 2 (Học kỳ 2) — đã triển khai 37 bài mới (Toán 27 + Tiếng Việt 10):**
+
+- **Toán Chủ đề 8–13** (Bài 38, 40–58, 61–67): thừa số–tích, bảng nhân 5, phép chia, số bị chia–số
+  chia–thương, bảng chia 2 và 5, hình khối, số trong phạm vi 1 000 (đơn vị–chục–trăm–nghìn, tròn
+  chục/trăm, ba chữ số, viết tổng, so sánh), đề-xi-mét/mét/ki-lô-mét, tiền Việt Nam, đo độ dài,
+  trừ trong phạm vi 1 000 (có animation cột dọc), kiểm đếm, biểu đồ tranh, chắc chắn/có thể/không thể.
+  Các bài "Luyện tập chung" (Bài 45, 54, 58, 63) làm dạng **lật trang** (flipbook) mỗi trang ôn 1 bài.
+- **Tiếng Việt tập 2** (10 bài): chính tả vần khó, vốn từ thiên nhiên–cây cối, ôn từ loại, dấu phẩy,
+  các loại câu, dấu chấm than, vốn từ theo chủ điểm (kèm đọc hiểu đoạn ngắn tự soạn), từ trái nghĩa,
+  luyện viết đoạn văn (chọn/sắp xếp câu), ôn tập cuối năm (lật trang).
+- **Chưa làm (để Giai đoạn 3):** Chủ đề 14 (Bài 68–75 Ôn tập cuối năm Toán) và các bài Tập 1 còn khoá
+  (Toán Chủ đề 3–7: ki-lô-gam/lít, cộng trừ có nhớ phạm vi 100, hình phẳng, ngày–giờ…).
+- **Lưu ý trung thực:** phiên này KHÔNG có bản scan SGK tập 2 → nội dung Toán bám đúng tên bài trong
+  khung chương + kiến thức chuẩn (mọi đáp án tính bằng code); Tiếng Việt tự soạn, không chép bài đọc.
+  Tất cả giữ nhãn "bản nháp" cho đến khi bố mẹ đối chiếu SGK. Hình tờ tiền là minh hoạ cách điệu.
+- **Kỹ thuật mới:** file `js/content-tap2.js` (nạp sau icons-data.js, trước engine.js) chứa toàn bộ nội
+  dung Giai đoạn 2 và tự gắn vào `CONTENT`; khối mới trong engine: `groupviz` (nhân: xếp vào nhóm /
+  chia: chia đều vào đĩa, bấm để xem), `placevalue` (dựng số bằng +/−), `pictochart` (biểu đồ tranh),
+  `ruler` (thước kẻ); tuỳ chọn `vsmall` thu nhỏ hình trong câu hỏi; icon tự vẽ mới (khối trụ/cầu, tờ
+  tiền, mặt trời, mây, mưa, cây, núi). `iconHtml` không còn dùng `<img>` cho video.
+- **Đã kiểm tra:** stress-test 81.000+ câu sinh ngẫu nhiên (đáp án tính lại bằng code, lựa chọn không
+  trùng, không thiếu emoji SVG, khoá CURRICULUM↔CONTENT khớp) — 0 lỗi; smoke-test trên trình duyệt
+  toàn bộ 60 bài (học/luyện tập/kiểm tra/lật trang) — 0 lỗi, không lỗi console.
+
 **Đã chuyển sang git + deploy Vercel — không còn dùng file "vXX" đơn lẻ nữa.**
 Repo: https://github.com/LukeNguyen66/Lop-2 (nhánh `main`) — mỗi lần push, Vercel tự
 động build lại. Link app đang chạy: https://lop-2-chi.vercel.app/

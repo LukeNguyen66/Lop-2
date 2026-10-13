@@ -208,6 +208,44 @@
   .gc-eq{margin-top:10px; font-size:26px; font-weight:900; text-align:center; color:var(--ink); opacity:0; transition:opacity .4s ease;}
   .gc-eq.show{opacity:1;}
 
+  /* NHOM DO VAT (nhan/chia) */
+  .gv-stage{background:#F4F7FF; border-radius:16px; padding:12px; margin-bottom:10px;}
+  .gv-pool{display:flex; flex-wrap:wrap; gap:4px; min-height:38px; margin-bottom:10px;}
+  .gv-plates{display:flex; flex-wrap:wrap; gap:10px;}
+  .gv-plate{flex:1 1 84px; min-height:54px; background:#fff; border:2px dashed #BFD0F5; border-radius:14px;
+    padding:6px; display:flex; flex-wrap:wrap; gap:3px; align-items:center; justify-content:center;}
+  .gv-ic{font-size:26px; width:30px; height:30px; display:inline-flex; align-items:center; justify-content:center;}
+  .gv-ic.gv-new{opacity:0; transform:scale(.4); animation:gcPopIn .35s ease forwards;}
+
+  /* HANG TRAM - CHUC - DON VI */
+  .pv-cols{display:flex; gap:8px; justify-content:center; margin-bottom:10px;}
+  .pv-col{flex:1 1 0; max-width:110px; background:#fff; border-radius:14px; padding:8px 6px; text-align:center; box-shadow:var(--shadow);}
+  .pv-name{font-size:12px; font-weight:800; color:var(--soft); text-transform:uppercase;}
+  .pv-items{min-height:64px; display:flex; flex-wrap:wrap; gap:3px; justify-content:center; align-items:flex-end; padding:6px 0;}
+  .pv-num{font-size:26px; font-weight:900; color:var(--ink);}
+  .pv-ctrl{display:flex; gap:6px; justify-content:center; margin-top:4px;}
+  .pv-ctrl button{width:32px; height:32px; border-radius:50%; border:none; background:var(--blue); color:#fff; font-size:18px; font-weight:900; cursor:pointer;}
+  .pv-ctrl button:active{transform:scale(.9);}
+  .pv-th{width:30px; height:30px; background:#9B7EDE; border-radius:6px;}
+  .pv-h{width:22px; height:22px; background:#5B8DEF; border-radius:4px;}
+  .pv-t{width:8px; height:26px; background:#FFB020; border-radius:3px;}
+  .pv-u{width:10px; height:10px; background:#4CAF50; border-radius:50%;}
+  .pv-read{text-align:center; font-size:18px; font-weight:700; color:var(--ink);}
+  .pv-read b{font-size:26px; color:var(--blue);}
+
+  /* BIEU DO TRANH + THUOC KE + doan doc hieu */
+  .pc-note{font-size:13px; font-weight:700; color:var(--soft); margin-top:6px;}
+  .ru-track{display:flex; gap:2px; overflow-x:auto; padding:6px 0; margin-bottom:8px;}
+  .ru-tick{flex:0 0 28px; height:34px; border:2px solid var(--line); border-radius:6px; background:#fff;
+    display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:800; color:var(--soft);}
+  .ru-tick.in{background:#FFF3CD; border-color:#FFD23F; color:var(--ink);}
+  .ru-tick.edge{background:var(--blue); border-color:var(--blue); color:#fff;}
+  .qvisual.sm{font-size:34px;}
+  .rd-passage{background:#F4F7FF; border-left:4px solid var(--blue); border-radius:10px; padding:10px 12px;
+    margin-bottom:10px; font-size:17px; font-weight:600; line-height:1.55;}
+  .pcq-row{display:flex; align-items:center; gap:8px; margin:3px 0; font-size:16px; font-weight:700;}
+  .pcq-row .pcq-l{flex:0 0 74px;} .pcq-row .pcq-i{font-size:22px; display:flex; flex-wrap:wrap;}
+
   /* FLIPBOOK — bai Hoc nhieu trang, lat trang co hieu ung 3D */
   .fb-wrap{margin:8px 0;}
   .fb-nav{display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}

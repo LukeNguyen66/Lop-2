@@ -129,6 +129,7 @@ function renderBlocksHtml(blocks){
     else if(b.type==='placevalue'){ html+=`<div class="pv-wrap" id="pvMount_${idx}"></div>`; }
     else if(b.type==='pictochart'){ html+=`<div class="pc-wrap" id="pcMount_${idx}"></div>`; }
     else if(b.type==='ruler'){ html+=`<div class="ru-wrap" id="ruMount_${idx}"></div>`; }
+    else if(b.type==='stepper'){ html+=`<div class="st-wrap" id="stMount_${idx}"></div>`; }
   });
   return html;
 }
@@ -146,6 +147,32 @@ function mountBlocksInteractive(blocks){
   blocks.forEach((b,idx)=>{ if(b.type==='placevalue') mountPlaceValue('pvMount_'+idx, b); });
   blocks.forEach((b,idx)=>{ if(b.type==='pictochart') mountPictoChart('pcMount_'+idx, b); });
   blocks.forEach((b,idx)=>{ if(b.type==='ruler') mountRuler('ruMount_'+idx, b); });
+  blocks.forEach((b,idx)=>{ if(b.type==='stepper') mountStepper('stMount_'+idx, b); });
+}
+
+/* ===== HƯỚNG DẪN TỪNG BƯỚC — bấm "bước tiếp theo" để hiện dần từng bước có hình minh hoạ =====
+   {type:"stepper", title, steps:[{say:"lời hướng dẫn (HTML)", vis:"hình minh hoạ (HTML)"}, ...]} */
+const ST_STATE={};
+function mountStepper(mountId,cfg){
+  ST_STATE[mountId]={n:0,cfg};
+  const el=document.getElementById(mountId); if(!el) return;
+  el.innerHTML=`${cfg.title?`<div class="st-title">${emo(cfg.title)}</div>`:''}<div class="st-list" id="${mountId}_list"></div>
+    <button class="gc-btn st-next" id="${mountId}_next" onclick="stNext('${mountId}')"></button>`;
+  stNext(mountId,true);
+}
+function stNext(mountId,silent){
+  const s=ST_STATE[mountId]; if(!s) return;
+  const steps=s.cfg.steps, list=document.getElementById(mountId+'_list'), btn=document.getElementById(mountId+'_next');
+  if(!list||!btn) return;
+  if(s.n>=steps.length){ s.n=0; list.innerHTML=''; }
+  const st=steps[s.n]; s.n++;
+  const d=document.createElement('div'); d.className='st-step';
+  d.innerHTML=`<span class="st-n">${s.n}</span><div class="st-body"><div class="st-say">${emo(st.say)}</div>${st.vis?emo(st.vis):''}</div>`;
+  list.appendChild(d);
+  if(!silent){ sStep(); try{ d.scrollIntoView({block:'nearest',behavior:'smooth'}); }catch(e){} }
+  const last=s.n>=steps.length;
+  btn.textContent = last ? '↺ Xem lại từ đầu' : `👆 Bấm để xem bước ${s.n+1}/${steps.length}`;
+  btn.classList.toggle('done', last);
 }
 
 /* ===== NHÓM ĐỒ VẬT: PHÉP NHÂN (xếp vào từng nhóm) / PHÉP CHIA (chia đều vào đĩa) =====

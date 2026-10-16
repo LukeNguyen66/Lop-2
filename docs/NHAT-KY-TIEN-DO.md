@@ -5,6 +5,16 @@
 
 ## TRẠNG THÁI HIỆN TẠI
 
+**🆕 VIẾT LẠI PHẦN "HỌC" CỦA TOÀN BỘ 60 BÀI (hướng dẫn từng bước):**
+Bố mẹ phản hồi: phần Học quá sơ sài ("Mẹo là gì? … ghi thế này khó hiểu"). Đã viết lại toàn bộ trong
+file mới `js/learn-steps.js` (nạp sau content-tap2.js, ghi đè `learn` của từng bài). Khối mới `stepper`:
+bấm "Bấm để xem bước tiếp theo" để hiện dần từng bước, mỗi bước có lời giải thích (LÀM GÌ, VÌ SAO) + hình
+minh hoạ (khung 10 ô cho cộng/trừ qua 10, chấm màu, nhóm đồ vật, đặt tính cột có lời giải thích từng cột kể
+cả nhớ/mượn, thước kẻ, khối chục-trăm, ảnh minh hoạ AI). Các khối tương tác cũ (tia số, bể cá, vcalc,
+thẻ hoạt động…) vẫn giữ ngay sau phần giải thích. Nguyên tắc: không viết chung chung, dùng "Ghi nhớ"/"Cách
+làm" kèm nội dung cụ thể. Mọi phép tính trong lời giải được kiểm tra tự động (0 lỗi). 78 khối hướng dẫn.
+Lưu ý phương pháp: trừ qua 10 làm theo cách "tách số bị trừ = 10 + số lẻ" (đúng như nội dung cũ).
+
 **🆕 GIAI ĐOẠN 2 (Học kỳ 2) — đã triển khai 37 bài mới (Toán 27 + Tiếng Việt 10):**
 
 - **Toán Chủ đề 8–13** (Bài 38, 40–58, 61–67): thừa số–tích, bảng nhân 5, phép chia, số bị chia–số

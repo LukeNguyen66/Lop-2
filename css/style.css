@@ -244,6 +244,7 @@
   .st-pics{display:flex; flex-wrap:wrap; gap:8px; margin-top:6px;}
   .st-pic{display:inline-flex; flex-direction:column; align-items:center; gap:2px; font-size:13px; font-weight:800; color:var(--ink);}
   .st-pic img,.st-pic .emo-ic{width:56px; height:56px; border-radius:50%; object-fit:cover; background:#fff; font-size:56px;}
+  .gbox{display:inline-flex; flex-wrap:wrap; max-width:128px; padding:3px 5px; border:2px dashed #BFD0F5; border-radius:10px; margin:2px; background:#fff;}
   .pvr{display:inline-flex; flex-wrap:wrap; gap:3px; align-items:flex-end;}
   .st-tag{display:inline-block; padding:1px 8px; border-radius:8px; font-weight:800; font-size:14px; background:#E8EEFF; color:var(--blue);}
   .st-tag.b{background:#FFEBD2; color:#C86A10;} .st-tag.c{background:#DDF3DE; color:#2E7D32;} .st-tag.r{background:#FFE0E0; color:#C0392B;}

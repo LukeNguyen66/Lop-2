@@ -918,7 +918,34 @@
       {type:"example", html:"<b>Thử viết:</b> Con hãy nói (hoặc viết) 3 câu về một con vật mà con yêu thích — câu mở đầu, câu tả, câu cảm xúc — rồi đọc cho bố mẹ nghe."}
     ]};
 
-/*__PART_END__*/
+/* ---------- hình vẽ SVG dùng chung: đồng hồ, hình học (dùng cho bài Giai đoạn 3) ---------- */
+  function clockSvg(h,m,size){
+    const hh=((h%12)+m/60)*30, mm=m*6, c=50, pt=(deg,r)=>{ const a=(deg-90)*Math.PI/180; return [c+r*Math.cos(a), c+r*Math.sin(a)]; };
+    let t='';
+    for(let i=1;i<=12;i++){ const p=pt(i*30,38); t+=`<text x="${p[0].toFixed(1)}" y="${(p[1]+3.4).toFixed(1)}" font-size="9" font-weight="800" text-anchor="middle" fill="#2D3142" font-family="Arial,sans-serif">${i}</text>`; }
+    for(let i=0;i<60;i++){ const a=pt(i*6,i%5?45.5:43.5), b=pt(i*6,47); t+=`<line x1="${a[0].toFixed(1)}" y1="${a[1].toFixed(1)}" x2="${b[0].toFixed(1)}" y2="${b[1].toFixed(1)}" stroke="#8A93A8" stroke-width="${i%5?0.5:1}"/>`; }
+    const H=pt(hh,22), M=pt(mm,34);
+    return `<svg class="clk" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size||150}" height="${size||150}"><circle cx="50" cy="50" r="49" fill="#fff" stroke="#5B8DEF" stroke-width="2.4"/>${t}<line x1="50" y1="50" x2="${H[0].toFixed(1)}" y2="${H[1].toFixed(1)}" stroke="#2D3142" stroke-width="3.4" stroke-linecap="round"/><line x1="50" y1="50" x2="${M[0].toFixed(1)}" y2="${M[1].toFixed(1)}" stroke="#E5484D" stroke-width="2" stroke-linecap="round"/><circle cx="50" cy="50" r="2.6" fill="#2D3142"/></svg>`;
+  }
+  const GEO_W=220, GEO_H=110;
+  const svgWrap=inner=>`<svg class="geo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${GEO_W} ${GEO_H}" width="${GEO_W}" height="${GEO_H}" font-family="Arial,sans-serif">${inner}</svg>`;
+  const gPt=(x,y,lab,dx,dy,col)=>`<circle cx="${x}" cy="${y}" r="3.6" fill="${col||'#E5484D'}"/><text x="${x+(dx===undefined?0:dx)}" y="${y+(dy===undefined?-9:dy)}" font-size="13" font-weight="800" text-anchor="middle" fill="#2D3142">${lab}</text>`;
+  const GEO={
+    points:(labs)=>svgWrap(labs.map((l,i)=>gPt(30+i*(160/Math.max(1,labs.length-1)), i%2?70:44, l)).join('')),
+    segment:(a,b)=>svgWrap(`<line x1="32" y1="62" x2="188" y2="46" stroke="#2D3142" stroke-width="2.6"/>${gPt(32,62,a,0,18)}${gPt(188,46,b,0,-10)}`),
+    line:()=>svgWrap(`<line x1="10" y1="72" x2="210" y2="38" stroke="#2D3142" stroke-width="2.6"/><path d="M10 72l9 -1.5M10 72l7 6" stroke="#2D3142" stroke-width="2.2" fill="none"/><path d="M210 38l-9 1.5M210 38l-7 -6" stroke="#2D3142" stroke-width="2.2" fill="none"/>`),
+    curve:()=>svgWrap('<path d="M20 78 C 60 8, 110 100, 150 40 S 200 24, 208 60" fill="none" stroke="#2D3142" stroke-width="2.6"/>'),
+    three:(collinear,l)=>{ l=l||['A','B','C']; const A=[30,78], C=[190,32], B=collinear?[110,55]:[110,92];
+      return svgWrap(`${collinear?'<line x1="14" y1="86" x2="206" y2="24" stroke="#BFD0F5" stroke-width="2" stroke-dasharray="4 3"/>':''}${gPt(A[0],A[1],l[0],0,-9)}${gPt(B[0],B[1],l[1],0,collinear?-10:18)}${gPt(C[0],C[1],l[2],0,-10)}`); },
+    poly:(labs,lens)=>{ const P=labs.length===3?[[30,80],[100,30],[190,70]]:[[24,82],[80,26],[140,70],[196,30]]; let ln='';
+      for(let i=0;i<P.length-1;i++){ ln+=`<line x1="${P[i][0]}" y1="${P[i][1]}" x2="${P[i+1][0]}" y2="${P[i+1][1]}" stroke="#2D3142" stroke-width="2.6"/>`;
+        if(lens&&lens[i]!==undefined){ const dx=P[i+1][0]-P[i][0], dy=P[i+1][1]-P[i][1], L=Math.hypot(dx,dy); let nx=-dy/L, ny=dx/L; if(ny>0){ nx=-nx; ny=-ny; } const mx=(P[i][0]+P[i+1][0])/2+nx*15, my=(P[i][1]+P[i+1][1])/2+ny*15+4; ln+=`<text x="${mx.toFixed(1)}" y="${my.toFixed(1)}" font-size="12" font-weight="800" fill="#3E7BD8" text-anchor="middle">${lens[i]} cm</text>`; } }
+      return svgWrap(ln+P.map((p,i)=>gPt(p[0],p[1],labs[i],0,i===0||i===2?16:-9)).join('')); },
+    shape:(n)=>{ const cx=110, cy=55, r=44; const rot={3:-90,4:-135,5:-90}[n]||-90; const P=Array.from({length:n},(_,i)=>{ const a=(rot+i*360/n)*Math.PI/180; return [cx+r*1.25*Math.cos(a), cy+r*Math.sin(a)]; });
+      return svgWrap(`<polygon points="${P.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}" fill="#E8EEFF" stroke="#2D3142" stroke-width="2.6" stroke-linejoin="round"/>`+P.map(p=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.4" fill="#E5484D"/>`).join('')); },
+  };
+  window.LS={rep,dots,row,N,eq,tag,frames,strip,pvr,pv,col,grp,plates,ci,big,chips,pic,pics,sentence,tinhCot,congQua10,truQua10,orig,ghiNho,clockSvg,GEO,svgWrap};
+  /*__PART_END__*/
 
   Object.keys(LEARN).forEach(k=>{ if(CONTENT[k]) CONTENT[k].learn=LEARN[k]; else console.warn('learn-steps: thiếu CONTENT.'+k); });
 })();

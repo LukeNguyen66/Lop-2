@@ -208,6 +208,23 @@
   .gc-eq{margin-top:10px; font-size:26px; font-weight:900; text-align:center; color:var(--ink); opacity:0; transition:opacity .4s ease;}
   .gc-eq.show{opacity:1;}
 
+  /* DONG HO + LICH + HINH VE TRONG CAU HOI */
+  .qvisual svg.clk{width:150px; height:150px;} .qvisual svg.geo{width:240px; max-width:100%; height:auto;}
+  .qvisual.sm svg.clk{width:110px; height:110px;}
+  .st-body svg.geo{max-width:100%; height:auto;}
+  .ck-box{display:flex; gap:12px; align-items:center; flex-wrap:wrap; justify-content:center; background:#F4F7FF; border-radius:16px; padding:12px;}
+  .ck-ctl{display:flex; flex-direction:column; gap:8px; align-items:center;}
+  .ck-read{font-size:16px; font-weight:700; color:var(--ink); text-align:center;}
+  .ck-read b{color:var(--blue); font-size:19px;}
+  .ck-row{display:flex; gap:6px; flex-wrap:wrap; justify-content:center;}
+  .ck-btn{background:#fff; border:2px solid var(--line); border-radius:10px; padding:7px 11px; font-size:13.5px; font-weight:800; color:var(--ink); cursor:pointer;}
+  .ck-btn.on{background:var(--blue); border-color:var(--blue); color:#fff;} .ck-btn.sq{border-color:#BFD0F5;}
+  .ca-grid{display:grid; grid-template-columns:repeat(7,1fr); gap:4px; background:#F4F7FF; border-radius:14px; padding:8px; max-width:340px; margin:0 auto;}
+  .ca-h{text-align:center; font-size:12px; font-weight:800; color:var(--soft); padding:2px 0;}
+  .ca-c{aspect-ratio:1; border:none; border-radius:8px; background:#fff; font-size:14px; font-weight:800; color:var(--ink); cursor:pointer; padding:0;}
+  .ca-c.ca-e{background:transparent; cursor:default;} .ca-c.on{background:var(--blue); color:#fff;}
+  .ca-say{text-align:center; font-size:15px; font-weight:700; margin-top:8px; color:var(--ink);}
+
   /* HUONG DAN TUNG BUOC (stepper) + hinh minh hoa dung chung */
   .st-wrap{margin:14px 0;}
   .st-title{font-size:16px; font-weight:800; color:var(--ink); margin-bottom:8px;}

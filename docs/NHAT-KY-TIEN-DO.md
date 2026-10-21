@@ -5,6 +5,30 @@
 
 ## TRẠNG THÁI HIỆN TẠI
 
+**🆕 GIAI ĐOẠN 3 — MỞ KHOÁ HẾT CÁC BÀI CÒN LẠI (98/98 bài trong khung chương đã có nội dung):**
+Thêm 39 bài mới trong file `js/content-gd3.js` (nạp sau learn-steps.js, trước engine.js; tự gắn `key` vào
+khung chương theo tiêu đề bài qua bảng KEYMAP ở cuối file). Gồm:
+- **Toán Tập 1:** Bài 10, 14 (LTC cộng/trừ qua 10); Chủ đề 3 (ki-lô-gam, lít, thực hành, LTC); Chủ đề 4
+  (cộng/trừ có nhớ phạm vi 100, kèm animation đặt tính + LTC); Chủ đề 5 (điểm–đoạn thẳng–đường thẳng–
+  đường cong–ba điểm thẳng hàng, đường gấp khúc–tứ giác, vẽ đoạn thẳng/gấp cắt ghép, LTC); Chủ đề 6 (đồng
+  hồ, lịch, thực hành, LTC); Chủ đề 7 (ôn tập học kì 1, 4 bài lật trang).
+- **Toán Chủ đề 14** (Bài 68–75): ôn tập cuối năm, mỗi bài lật trang.
+- **Tiếng Việt Tập 1** (7 bài còn khoá): chính tả ng/ngh–r/d/gi–an/ang, l/n–ăn/ăng–ân/âng, từ ngữ tình cảm
+  bạn bè + dấu câu, từ chỉ đặc điểm/hoạt động + câu nêu hoạt động, vốn từ theo chủ điểm (nhóm từ do trợ lý
+  chọn, CHƯA đối chiếu mục lục SGK), câu nêu đặc điểm, ôn dấu câu.
+- **Khối mới trong engine:** `clock` (đồng hồ bấm chỉnh giờ/phút, SVG), `calendar` (lịch tháng bấm ngày →
+  thứ); thư viện hình vẽ SVG dùng chung trong `window.LS` (`clockSvg`, `GEO.*`: điểm, đoạn thẳng, đường
+  thẳng, đường cong, ba điểm, đường gấp khúc có độ dài, đa giác) — dùng được trong câu hỏi qua `visual`.
+  Icon mới: cân, chai 1 lít, bao 1 kg. Hàm trợ giúp dùng chung: `window.LS` (learn-steps.js), `window.CH`
+  (content-tap2.js).
+- **Bổ sung:** thêm ngân hàng câu cho 2 bài chính tả cũ (tr/ch, s/x) vì trước chỉ sinh được 8–9 câu khác
+  nhau/lượt (thiếu so với mức 10 câu).
+- **Lưu ý trung thực:** vẫn chưa có bản scan SGK → nội dung bám tên bài trong khung chương + kiến thức chuẩn,
+  giữ nhãn "bản nháp". Đồng hồ chỉ dùng giờ đúng, 15 phút, 30 phút (giờ rưỡi); tháng 2 ghi 28 (hoặc 29) ngày.
+- **Đã kiểm tra:** stress-test 323.000+ câu sinh ngẫu nhiên (đáp án tính lại, lựa chọn không trùng) — 0 lỗi;
+  kiểm tra tự động mọi phép tính trong lời hướng dẫn — 0 lỗi; smoke-test trình duyệt 98 bài (151 khối hướng
+  dẫn, 196 lượt luyện tập/kiểm tra) — 0 lỗi, không lỗi console.
+
 **🆕 VIẾT LẠI PHẦN "HỌC" CỦA TOÀN BỘ 60 BÀI (hướng dẫn từng bước):**
 Bố mẹ phản hồi: phần Học quá sơ sài ("Mẹo là gì? … ghi thế này khó hiểu"). Đã viết lại toàn bộ trong
 file mới `js/learn-steps.js` (nạp sau content-tap2.js, ghi đè `learn` của từng bài). Khối mới `stepper`:

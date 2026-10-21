@@ -130,6 +130,8 @@ function renderBlocksHtml(blocks){
     else if(b.type==='pictochart'){ html+=`<div class="pc-wrap" id="pcMount_${idx}"></div>`; }
     else if(b.type==='ruler'){ html+=`<div class="ru-wrap" id="ruMount_${idx}"></div>`; }
     else if(b.type==='stepper'){ html+=`<div class="st-wrap" id="stMount_${idx}"></div>`; }
+    else if(b.type==='clock'){ html+=`<div class="ck-wrap" id="ckMount_${idx}"></div>`; }
+    else if(b.type==='calendar'){ html+=`<div class="ca-wrap" id="caMount_${idx}"></div>`; }
   });
   return html;
 }
@@ -148,6 +150,47 @@ function mountBlocksInteractive(blocks){
   blocks.forEach((b,idx)=>{ if(b.type==='pictochart') mountPictoChart('pcMount_'+idx, b); });
   blocks.forEach((b,idx)=>{ if(b.type==='ruler') mountRuler('ruMount_'+idx, b); });
   blocks.forEach((b,idx)=>{ if(b.type==='stepper') mountStepper('stMount_'+idx, b); });
+  blocks.forEach((b,idx)=>{ if(b.type==='clock') mountClock('ckMount_'+idx, b); });
+  blocks.forEach((b,idx)=>{ if(b.type==='calendar') mountCalendar('caMount_'+idx, b); });
+}
+
+/* ===== ĐỒNG HỒ: bấm chọn giờ, phút để xem kim chạy; đọc giờ bằng lời ===== */
+const CK_STATE={};
+function mountClock(mountId,cfg){
+  CK_STATE[mountId]={h:cfg.h||3,m:cfg.m||0};
+  const el=document.getElementById(mountId); if(!el) return;
+  const mins=(cfg.mins||[0,15,30]).map(m=>`<button class="ck-btn" data-m="${m}" onclick="ckSet('${mountId}',null,${m})">${m===0?'Giờ đúng':m+' phút'}</button>`).join('');
+  el.innerHTML=`${cfg.text?`<div class="gc-label">${emo(cfg.text)}</div>`:''}
+    <div class="ck-box"><div class="ck-face" id="${mountId}_face"></div>
+      <div class="ck-ctl"><div class="ck-read" id="${mountId}_read"></div>
+        <div class="ck-row"><button class="ck-btn sq" onclick="ckHour('${mountId}',-1)">− giờ</button><button class="ck-btn sq" onclick="ckHour('${mountId}',1)">+ giờ</button></div>
+        <div class="ck-row">${mins}</div></div></div>`;
+  ckRender(mountId);
+}
+function ckRender(mountId){
+  const s=CK_STATE[mountId]; const face=document.getElementById(mountId+'_face'); if(!face) return;
+  face.innerHTML=window.LS.clockSvg(s.h,s.m,150);
+  const txt = s.m===0 ? `${s.h} giờ` : (s.m===30 ? `${s.h} giờ 30 phút (${s.h} giờ rưỡi)` : `${s.h} giờ ${s.m} phút`);
+  document.getElementById(mountId+'_read').innerHTML=`Đồng hồ chỉ: <b>${txt}</b>`;
+  document.querySelectorAll('#'+mountId+' .ck-btn[data-m]').forEach(b=>b.classList.toggle('on', Number(b.dataset.m)===s.m));
+}
+function ckHour(mountId,d){ const s=CK_STATE[mountId]; s.h=((s.h-1+d+12)%12)+1; sStep(); ckRender(mountId); }
+function ckSet(mountId,h,m){ const s=CK_STATE[mountId]; if(h!==null) s.h=h; if(m!==null) s.m=m; sStep(); ckRender(mountId); }
+
+/* ===== LỊCH THÁNG: bấm vào một ngày để biết ngày đó là thứ mấy ===== */
+const CA_NAMES=['Thứ hai','Thứ ba','Thứ tư','Thứ năm','Thứ sáu','Thứ bảy','Chủ nhật'];
+function mountCalendar(mountId,cfg){
+  const el=document.getElementById(mountId); if(!el) return;
+  const head=['T2','T3','T4','T5','T6','T7','CN'].map(d=>`<div class="ca-h">${d}</div>`).join('');
+  let cells=''; for(let i=0;i<cfg.start;i++) cells+='<div class="ca-c ca-e"></div>';
+  for(let d=1; d<=cfg.days; d++){ const wd=(cfg.start+d-1)%7; cells+=`<button class="ca-c" onclick="caPick('${mountId}',${d},${wd})">${d}</button>`; }
+  el.innerHTML=`${cfg.title?`<div class="gc-label">${emo(cfg.title)}</div>`:''}<div class="ca-grid">${head}${cells}</div>
+    <div class="ca-say" id="${mountId}_say">👉 Bấm vào một ngày để biết đó là thứ mấy. (Tháng này có ${cfg.days} ngày.)</div>`;
+}
+function caPick(mountId,d,wd){
+  document.querySelectorAll('#'+mountId+' .ca-c').forEach(b=>b.classList.remove('on'));
+  const b=[...document.querySelectorAll('#'+mountId+' button.ca-c')].find(x=>Number(x.textContent)===d); if(b) b.classList.add('on');
+  document.getElementById(mountId+'_say').innerHTML=`Ngày <b>${d}</b> là <b>${CA_NAMES[wd]}</b>.`; sStep();
 }
 
 /* ===== HƯỚNG DẪN TỪNG BƯỚC — bấm "bước tiếp theo" để hiện dần từng bước có hình minh hoạ =====

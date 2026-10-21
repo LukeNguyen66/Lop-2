@@ -1234,5 +1234,6 @@
   V.tv2_on_tap_cuoi_nam.gen=[].concat(V.tv2_trai_nghia.gen, V.tv2_dau_phay.gen, V.tv2_dau_cham_than.gen,
     V.tv2_cac_loai_cau.gen, V.tv2_vontu_chudiem.gen, V.tv2_on_tu_loai.gen, V.tv2_von_tu_thiennhien.gen, V.tv2_viet_doan.gen, [docGen]);
 
+  window.CH={R,P,near,mcNum,mcText,fillQ,fmt,SYM,cmpSymbol,pickN};
   Object.assign(CONTENT, T, V);
 })();

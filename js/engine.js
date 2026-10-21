@@ -701,7 +701,7 @@ function vDoStep(){
   let txt;
   if(s.op==='-'){
     if(s.carryOut>0){
-      txt=`Cột <b>${s.name}</b>: ${s.daEff} không đủ trừ ${s.db}, mượn 1 chục: ${s.daEff+10} − ${s.db} = ${s.diff}. Viết <b>${s.diff}</b>, nhớ mượn <b>1</b>.`;
+      txt=`Cột <b>${s.name}</b>: ${s.daEff} không trừ được ${s.db}, lấy ${s.daEff+10} − ${s.db} = ${s.diff}. Viết <b>${s.diff}</b>, nhớ <b>1</b>.`;
     } else {
       txt=`Cột <b>${s.name}</b>: ${s.daEff} − ${s.db} = ${s.diff}. Viết <b>${s.diff}</b>.`;
     }

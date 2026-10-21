@@ -76,6 +76,20 @@
      --------------------------------------------------------------------------------------- */
   const KG_PAIRS=[["bao gạo","bao ngô"],["quả dưa","quả bí"],["túi cam","túi táo"],["con gà","con vịt"],["bao đường","bao muối"]];
   const L_PAIRS=[["thùng nước","can dầu"],["bình nước","chai sữa"],["xô nước","chậu nước"]];
+  // cân hai đĩa: side 'L' = bên trái nặng hơn (chúi xuống), 'R' = bên phải nặng hơn, '=' = ngang nhau
+  const bal=(side,l,r)=>{ const ang=side==='L'?-9:side==='R'?9:0, t=ang*Math.PI/180, dy=80*Math.sin(t);
+    const lx=50, ly=44-dy, rx=210, ry=44+dy;
+    const pan=(x,y,txt)=>`<line x1="${x}" y1="${y}" x2="${x-26}" y2="${y+32}" stroke="#6b7785" stroke-width="2"/><line x1="${x}" y1="${y}" x2="${x+26}" y2="${y+32}" stroke="#6b7785" stroke-width="2"/><rect x="${x-32}" y="${y+32}" width="64" height="8" rx="4" fill="#4a90d9"/><text x="${x}" y="${y+58}" text-anchor="middle" font-size="13" fill="currentColor">${txt||''}</text>`;
+    return `<svg viewBox="0 0 260 140" width="260" style="max-width:100%;color:inherit"><polygon points="130,44 118,122 142,122" fill="#9aa5b1"/><rect x="104" y="120" width="52" height="7" rx="3" fill="#6b7785"/><line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="#6b7785" stroke-width="5" stroke-linecap="round"/><circle cx="130" cy="44" r="6" fill="#6b7785"/>${pan(lx,ly,l)}${pan(rx,ry,r)}</svg>`; };
+  const balQ=()=>{ const p=P(KG_PAIRS), k=R(0,2), side=['L','R','='][k];
+    const o=shuffleArr([p[0],p[1],"Hai vật nặng bằng nhau"]); const ans=side==='L'?p[0]:side==='R'?p[1]:"Hai vật nặng bằng nhau";
+    return mc3("Cân thăng bằng như hình dưới đây. Vật nào nặng hơn?", o, o.indexOf(ans), {visual:bal(side,p[0],p[1]), hint:"Đĩa nào chúi xuống thì vật trên đĩa đó nặng hơn; hai đĩa ngang nhau thì nặng bằng nhau"}); };
+  const LCMP=[["cái xô","cái cốc"],["cái can","cái chai nhỏ"],["cái thùng","cái bát"],["cái bình to","cái ly"]];
+  const litCmpQ=()=>{ const p=P(LCMP), big=Math.random()<0.5, a=big?p[0]:p[1], b=big?p[1]:p[0], o=["nhiều nước hơn","ít nước hơn"];
+    return two(a[0].toUpperCase()+a.slice(1)+" chứa được nhiều nước hơn hay ít nước hơn "+b+"?", o, big?0:1, {hint:"Vật to hơn thì chứa được nhiều nước hơn"}); };
+  const SCALE3=["cân đĩa","cân đồng hồ","cân bàn đồng hồ"];
+  const scaleQ=()=>{ const q=P([["Loại cân nào có hai đĩa để đặt vật?","cân đĩa"],["Loại cân nào có kim chỉ số để đọc khối lượng?","cân đồng hồ"]]);
+    const o=shuffleArr(SCALE3.slice()); return mc3(q[0], o, o.indexOf(q[1]), q[1]==="cân đồng hồ"?{hint:"Cân đồng hồ và cân bàn đồng hồ đều có kim, nhưng tên gọi đầy đủ ở đây là “cân đồng hồ”"}:{}); };
   const kgAdd=()=>{ const p=P(KG_PAIRS), a=R(2,9), b=R(2,9);
     return fillQ(`${p[0][0].toUpperCase()+p[0].slice(1)} nặng ${a} kg, ${p[1]} nặng ${b} kg. Cả hai nặng bao nhiêu ki-lô-gam?`, a+b, {hint:`${a} + ${b}`}); };
   const kgSub=()=>{ const t=R(11,40), s=R(2,t-3); return fillQ(`Cửa hàng có ${t} kg gạo, đã bán ${s} kg. Còn lại bao nhiêu ki-lô-gam gạo?`, t-s, {hint:`${t} − ${s}`}); };
@@ -97,6 +111,12 @@
     title:"Ki-lô-gam",
     learn:{ intro:"Ki-lô-gam là đơn vị đo khối lượng (độ nặng của vật). Con xem từng bước cách dùng cân và tính với ki-lô-gam nhé!",
       blocks:[
+        {type:"stepper", title:"Nặng hơn, nhẹ hơn, nặng bằng nhau", steps:[
+          {say:`Muốn biết vật nào <b>nặng hơn</b>, vật nào <b>nhẹ hơn</b>, ta đặt hai vật lên hai đĩa của một cái <b>cân</b>.`, vis:bal('=','','')},
+          {say:`Đĩa nào <b>chúi xuống</b> thì vật ở đĩa đó <b>nặng hơn</b>; đĩa bên kia <b>nhẹ hơn</b>. Ví dụ: <b>túi quả nặng hơn túi rau</b>, túi rau nhẹ hơn túi quả.`, vis:bal('L','túi quả','túi rau')},
+          {say:`Khi hai đĩa cân <b>ngang nhau</b>, hai vật <b>nặng bằng nhau</b>. Ví dụ: 1 quả dưa nặng bằng 2 quả bưởi.`, vis:bal('=','quả dưa','2 quả bưởi')},
+          {say:`Nhưng nặng <b>bao nhiêu</b> thì cân đĩa chưa cho biết. Vì vậy người ta dùng một đơn vị đo khối lượng: <b>ki-lô-gam</b>. Con xem tiếp nhé!`},
+        ]},
         {type:"stepper", title:"Đo độ nặng bằng ki-lô-gam", steps:[
           {say:`Muốn biết một vật <b>nặng hay nhẹ</b>, ta dùng <b>cân</b>. Đơn vị đo khối lượng ta học hôm nay là <b>ki-lô-gam</b>, viết tắt là <b>kg</b>.`, vis:`<div class="st-pics">${ci('scale')}</div>`},
           {say:`Đây là một bao gạo nặng <b>1 kg</b>. Đọc là "một ki-lô-gam".`, vis:`<div class="st-pics">${ci('bag1kg')}</div>`},
@@ -115,14 +135,19 @@
     test:[
       {type:"fill", q:"Quả dưa nặng 4 kg, quả bí nặng 2 kg. Cả hai quả nặng bao nhiêu ki-lô-gam?", answer:6},
       {type:"fill", q:"Bao thứ nhất nặng 12 kg, bao thứ hai nặng 7 kg. Bao thứ nhất nặng hơn bao thứ hai mấy ki-lô-gam?", answer:5},
-      {type:"fill", q:"10 kg + 8 kg = ? kg", answer:18},
+      {type:"mc", q:"Cân thăng bằng như hình dưới đây. Vật nào nặng hơn?", options:["túi quả","túi rau","Hai vật nặng bằng nhau"], answer:0, visual:bal('L','túi quả','túi rau'), hint:"Đĩa nào chúi xuống thì vật đó nặng hơn"},
     ],
-    gen:[kgAdd,kgSub,kgDiff,kgMore,kgExpr,unitKg]
+    gen:[kgAdd,kgSub,kgDiff,kgMore,kgExpr,unitKg,balQ]
   };
   G.knt_lit={
     title:"Lít",
     learn:{ intro:"Lít là đơn vị đo dung tích (lượng nước, sữa, dầu… một cái bình chứa được). Con xem từng bước nhé!",
       blocks:[
+        {type:"stepper", title:"Chứa nhiều hơn, chứa ít hơn", steps:[
+          {say:`Cái <b>bình</b> to chứa được <b>nhiều nước hơn</b> cái <b>cốc</b> nhỏ. Cái cốc chứa được <b>ít nước hơn</b> cái bình.`, vis:chips(['bình: chứa nhiều hơn','cốc: chứa ít hơn'],'c')},
+          {say:`Muốn biết chứa được <b>chính xác bao nhiêu</b>, ta dùng đơn vị đo <b>lít</b>. Chiếc <b>ca</b> này chứa <b>1 lít</b>; chiếc <b>chai</b> này cũng chứa <b>1 lít</b>.`, vis:`<div class="st-pics">${ci('bottle1l')}</div>`},
+          {say:`Rót <b>2 ca</b> 1 lít vào một cái xô thì xô có <b>2 lít</b> nước.`, vis:`<div class="st-pics">${ci('bottle1l')}${ci('bottle1l')}</div>`+eq(`1 l + 1 l = 2 l`)},
+        ]},
         {type:"stepper", title:"Đo lượng nước bằng lít", steps:[
           {say:`Muốn biết một cái chai, cái can <b>chứa được bao nhiêu nước</b>, ta dùng đơn vị <b>lít</b>, viết tắt là <b>l</b>.`, vis:`<div class="st-pics">${ci('bottle1l')}</div>`},
           {say:`Chai trong hình chứa <b>1 lít</b> nước. Đọc là "một lít", viết là <b>1 l</b>.`},
@@ -142,12 +167,17 @@
       {type:"fill", q:"Can thứ nhất đựng 14 l dầu, can thứ hai đựng 9 l dầu. Can thứ nhất đựng nhiều hơn mấy lít?", answer:5},
       {type:"fill", q:"7 l + 8 l = ? l", answer:15},
     ],
-    gen:[lAdd,lSub,lDiff,lExpr,unitL]
+    gen:[lAdd,lSub,lDiff,lExpr,unitL,litCmpQ]
   };
   G.knt_thuchanh_kg_lit={
     title:"Thực hành và trải nghiệm với ki-lô-gam, lít",
     learn:{ intro:"Con thực hành cân, đong và giải các bài toán có ki-lô-gam, lít. Con xem từng bước nhé!",
       blocks:[
+        {type:"stepper", title:"Các loại cân thường gặp", steps:[
+          {say:`<b>Cân đĩa:</b> có hai đĩa. Đặt vật ở một đĩa, quả cân ở đĩa kia; hai đĩa ngang nhau thì biết vật nặng bao nhiêu.`, vis:bal('=','vật','quả cân')},
+          {say:`<b>Cân đồng hồ:</b> có một kim; vật đặt lên đĩa cân, kim quay và chỉ số đo (kg). <b>Cân bàn đồng hồ:</b> cũng có kim chỉ số, dùng để cân những vật nặng hơn.`, vis:`<div class="st-pics">${ci('scale')}</div>`},
+          {say:`<b>Ví dụ đo được:</b> gói đường nặng <b>1 kg</b>, con vịt nặng <b>2 kg</b>, bạn Mi nặng <b>18 kg</b>.`, vis:chips(['gói đường: 1 kg','con vịt: 2 kg','bạn Mi: 18 kg'],'b')},
+        ]},
         {type:"stepper", title:"Cách cân một vật", steps:[
           {say:`<b>Bước 1:</b> Đặt cân trên mặt phẳng, kim chỉ số <b>0</b>.`},
           {say:`<b>Bước 2:</b> Đặt vật cần cân lên đĩa cân. Chờ kim đứng yên.`, vis:`<div class="st-pics">${ci('scale')}</div>`},
@@ -170,7 +200,7 @@
       {type:"fill", q:"Túi cam nặng 4 kg, túi táo nặng 6 kg. Cả hai túi nặng bao nhiêu ki-lô-gam?", answer:10},
       {type:"fill", q:"Can có 15 l dầu, đã dùng 8 l. Còn lại bao nhiêu lít dầu?", answer:7},
     ],
-    gen:[kgAdd,kgSub,lAdd,lSub,kgDiff,lDiff,
+    gen:[kgAdd,kgSub,lAdd,lSub,kgDiff,lDiff,scaleQ,
       ()=>{ const n=R(2,9); return fillQ(`Rót ${n} chai 1 lít vào xô. Xô có bao nhiêu lít nước?`, n); }]
   };
   G.knt_ltc_kg_lit={
@@ -203,10 +233,10 @@
   /* ---------------------------------------------------------------------------------------
      CHỦ ĐỀ 4 — CỘNG, TRỪ (CÓ NHỚ) TRONG PHẠM VI 100
      --------------------------------------------------------------------------------------- */
-  VCALC_PROBLEMS.knt_cong_nho_21=[{a:38,b:5,note:"có nhớ",op:"+"},{a:47,b:6,note:"có nhớ",op:"+"}];
-  VCALC_PROBLEMS.knt_cong_nho_22=[{a:46,b:28,note:"có nhớ",op:"+"},{a:57,b:35,note:"có nhớ",op:"+"}];
-  VCALC_PROBLEMS.knt_tru_nho_21=[{a:42,b:7,note:"có mượn",op:"-"},{a:51,b:8,note:"có mượn",op:"-"}];
-  VCALC_PROBLEMS.knt_tru_nho_22=[{a:52,b:18,note:"có mượn",op:"-"},{a:73,b:46,note:"có mượn",op:"-"}];
+  VCALC_PROBLEMS.knt_cong_nho_21=[{a:35,b:7,note:"có nhớ",op:"+"},{a:38,b:5,note:"có nhớ",op:"+"}];
+  VCALC_PROBLEMS.knt_cong_nho_22=[{a:36,b:17,note:"có nhớ",op:"+"},{a:46,b:28,note:"có nhớ",op:"+"}];
+  VCALC_PROBLEMS.knt_tru_nho_21=[{a:32,b:7,note:"có nhớ",op:"-"},{a:42,b:7,note:"có nhớ",op:"-"}];
+  VCALC_PROBLEMS.knt_tru_nho_22=[{a:42,b:15,note:"có nhớ",op:"-"},{a:52,b:18,note:"có nhớ",op:"-"}];
 
   // số đơn vị của a cộng b ≥ 10 và tổng ≤ 100
   const addCarry1=()=>{ for(let g=0;g<300;g++){ const b=R(2,9), a=R(11,95); if(a%10+b>=10 && a+b<=100) return [a,b]; } return [38,5]; };
@@ -243,15 +273,15 @@
     title:"Phép cộng (có nhớ) số có hai chữ số với số có một chữ số",
     learn:{ intro:"Khi cộng hai số mà hàng đơn vị cộng được 10 trở lên, ta viết chữ số hàng đơn vị của kết quả và nhớ 1 sang hàng chục. Con xem từng bước nhé!",
       blocks:[
-        {type:"stepper", title:"Đặt tính 38 + 5", steps:tinhCot(38,5,'+')},
-        {type:"stepper", title:"Cách nhẩm", steps:addMental(38,5)},
+        {type:"stepper", title:"Đặt tính 35 + 7", steps:tinhCot(35,7,'+')},
+        {type:"stepper", title:"Cách nhẩm", steps:addMental(35,7)},
         {type:"concept", text:"Con tự xem hoạt hình đặt tính và bấm từng bước:", big:""},
         {type:"vcalc"},
         ghiNho("Hàng đơn vị cộng được từ 10 trở lên thì <b>viết số lẻ, nhớ 1</b> sang hàng chục và cộng thêm 1 vào hàng chục.")
       ]},
     practice:[
-      {type:"fill", q:"Tính:", expr:"38 + 5", answer:43, hint:"8 + 5 = 13, viết 3 nhớ 1"},
-      {type:"fill", q:"Tính:", expr:"47 + 6", answer:53},
+      {type:"fill", q:"Tính:", expr:"35 + 7", answer:42, hint:"5 + 7 = 12, viết 2 nhớ 1"},
+      {type:"fill", q:"Tính:", expr:"38 + 5", answer:43},
       {type:"mc", q:"Tổng của 29 và 4 là:", options:["33","23","32","34"], answer:0},
     ],
     test:[
@@ -265,15 +295,15 @@
     title:"Phép cộng (có nhớ) số có hai chữ số với số có hai chữ số",
     learn:{ intro:"Cộng hai số có hai chữ số, hàng đơn vị cộng được 10 trở lên thì nhớ 1 sang hàng chục. Con xem từng bước nhé!",
       blocks:[
-        {type:"stepper", title:"Đặt tính 46 + 28", steps:tinhCot(46,28,'+')},
-        {type:"stepper", title:"Thêm ví dụ: 57 + 35", steps:tinhCot(57,35,'+')},
+        {type:"stepper", title:"Đặt tính 36 + 17", steps:tinhCot(36,17,'+')},
+        {type:"stepper", title:"Thêm ví dụ: 46 + 28", steps:tinhCot(46,28,'+')},
         {type:"concept", text:"Con tự xem hoạt hình đặt tính và bấm từng bước:", big:""},
         {type:"vcalc"},
         ghiNho("Đừng quên cộng số <b>nhớ</b> khi tính hàng chục. Kết quả trong phạm vi 100.")
       ]},
     practice:[
-      {type:"fill", q:"Tính:", expr:"46 + 28", answer:74, hint:"6 + 8 = 14, viết 4 nhớ 1"},
-      {type:"fill", q:"Tính:", expr:"57 + 35", answer:92},
+      {type:"fill", q:"Tính:", expr:"36 + 17", answer:53, hint:"6 + 7 = 13, viết 3 nhớ 1"},
+      {type:"fill", q:"Tính:", expr:"46 + 28", answer:74},
       {type:"mc", q:"Tổng của 38 và 25 là:", options:["63","53","62","73"], answer:0},
     ],
     test:[
@@ -303,17 +333,17 @@
   };
   G.knt_tru_nho_21={
     title:"Phép trừ (có nhớ) số có hai chữ số cho số có một chữ số",
-    learn:{ intro:"Khi chữ số hàng đơn vị của số bị trừ nhỏ hơn số trừ, ta mượn 1 chục (bằng 10 đơn vị) rồi trừ. Con xem từng bước nhé!",
+    learn:{ intro:"Khi chữ số hàng đơn vị của số bị trừ nhỏ hơn số trừ, ta lấy 1 chục (bằng 10 đơn vị) để trừ, viết kết quả rồi nhớ 1 sang hàng chục. Con xem từng bước nhé!",
       blocks:[
-        {type:"stepper", title:"Đặt tính 42 − 7", steps:tinhCot(42,7,'-')},
-        {type:"stepper", title:"Cách nhẩm", steps:subMental(42,7)},
+        {type:"stepper", title:"Đặt tính 32 − 7", steps:tinhCot(32,7,'-')},
+        {type:"stepper", title:"Cách nhẩm", steps:subMental(32,7)},
         {type:"concept", text:"Con tự xem hoạt hình đặt tính và bấm từng bước:", big:""},
         {type:"vcalc"},
-        ghiNho("2 nhỏ hơn 7 không trừ được thì <b>mượn 1 chục</b> → 12 − 7 = 5; hàng chục còn <b>4 − 1 = 3</b>.")
+        ghiNho("2 không trừ được 7, <b>lấy 12 trừ 7 bằng 5, viết 5, nhớ 1</b>; hàng chục: <b>3 trừ 1 bằng 2</b>, viết 2.")
       ]},
     practice:[
-      {type:"fill", q:"Tính:", expr:"42 − 7", answer:35, hint:"12 − 7 = 5, hàng chục 4 − 1 = 3"},
-      {type:"fill", q:"Tính:", expr:"51 − 8", answer:43},
+      {type:"fill", q:"Tính:", expr:"32 − 7", answer:25, hint:"12 − 7 = 5, viết 5 nhớ 1; 3 − 1 = 2"},
+      {type:"fill", q:"Tính:", expr:"42 − 7", answer:35},
       {type:"mc", q:"Hiệu của 63 và 5 là:", options:["58","57","68","48"], answer:0},
     ],
     test:[
@@ -321,20 +351,20 @@
       {type:"fill", q:"Tính:", expr:"80 − 9", answer:71},
       {type:"fill", q:"Một sợi dây dài 45 cm, cắt đi 8 cm. Còn lại bao nhiêu xăng-ti-mét?", answer:37},
     ],
-    gen:subGens2(subBorrow1,"Mượn 1 chục thành 10 đơn vị rồi trừ")
+    gen:subGens2(subBorrow1,"Không trừ được thì lấy 1 chục thành 10 đơn vị, viết kết quả và nhớ 1")
   };
   G.knt_tru_nho_22={
     title:"Phép trừ (có nhớ) số có hai chữ số cho số có hai chữ số",
-    learn:{ intro:"Trừ hai số có hai chữ số, khi hàng đơn vị không đủ trừ thì mượn 1 chục. Con xem từng bước nhé!",
+    learn:{ intro:"Trừ hai số có hai chữ số, khi hàng đơn vị không đủ trừ thì lấy thêm 10, viết kết quả và nhớ 1 sang hàng chục. Con xem từng bước nhé!",
       blocks:[
-        {type:"stepper", title:"Đặt tính 52 − 18", steps:tinhCot(52,18,'-')},
+        {type:"stepper", title:"Đặt tính 42 − 15", steps:tinhCot(42,15,'-')},
         {type:"stepper", title:"Thêm ví dụ: 73 − 46", steps:tinhCot(73,46,'-')},
         {type:"concept", text:"Con tự xem hoạt hình đặt tính và bấm từng bước:", big:""},
         {type:"vcalc"},
-        ghiNho("Hàng chục đã cho mượn 1 thì phải <b>bớt đi 1</b> khi trừ hàng chục.")
+        ghiNho("Đã <b>nhớ 1</b> ở hàng đơn vị thì khi trừ hàng chục, nhớ lấy số ở trên <b>trừ đi 1</b> trước (4 trừ 1 bằng 3, rồi 3 trừ 1 bằng 2).")
       ]},
     practice:[
-      {type:"fill", q:"Tính:", expr:"52 − 18", answer:34, hint:"12 − 8 = 4; 5 − 1 − 1 = 3"},
+      {type:"fill", q:"Tính:", expr:"42 − 15", answer:27, hint:"12 − 5 = 7, viết 7 nhớ 1; 4 − 1 = 3, 3 − 1 = 2"},
       {type:"fill", q:"Tính:", expr:"73 − 46", answer:27},
       {type:"mc", q:"Hiệu của 81 và 35 là:", options:["46","56","54","44"], answer:0},
     ],
@@ -343,7 +373,7 @@
       {type:"fill", q:"Tính:", expr:"90 − 47", answer:43},
       {type:"fill", q:"Lớp có 41 bạn, 17 bạn là nữ. Lớp có bao nhiêu bạn nam?", answer:24},
     ],
-    gen:subGens2(subBorrow2,"Đơn vị không đủ trừ thì mượn 1 chục")
+    gen:subGens2(subBorrow2,"Đơn vị không đủ trừ thì lấy thêm 10, viết kết quả và nhớ 1")
   };
   G.knt_ltc_tru_nho={
     title:"Luyện tập chung (Trừ có nhớ trong phạm vi 100)",
@@ -361,7 +391,7 @@
       {type:"fill", q:"Tính:", expr:"75 − 48", answer:27},
       {type:"fill", q:"Có 52 quả táo, đã bán 29 quả. Còn lại bao nhiêu quả?", answer:23},
     ],
-    gen:[].concat(subGens2(subBorrow1,"Mượn 1 chục thành 10 đơn vị"), subGens2(subBorrow2,"Đơn vị không đủ trừ thì mượn 1 chục"))
+    gen:[].concat(subGens2(subBorrow1,"Lấy 1 chục thành 10 đơn vị rồi nhớ 1"), subGens2(subBorrow2,"Đơn vị không đủ trừ thì lấy thêm 10, viết kết quả và nhớ 1"))
   };
 
   /* ---------------------------------------------------------------------------------------
@@ -382,7 +412,9 @@
   const rulerSegQ=()=>{ const a=R(0,4), len=R(3,9); return fillQ(`Vẽ đoạn thẳng từ vạch ${a} đến vạch ${a+len} của thước. Đoạn thẳng dài mấy xăng-ti-mét?`, len, {hint:`${a+len} − ${a}`}); };
   const rulerZeroQ=()=>{ const len=R(4,12); return fillQ(`Vẽ đoạn thẳng AB dài ${len} cm. Đặt vạch 0 của thước trùng điểm A thì điểm B nằm ở vạch số mấy?`, len); };
   const quadQ=()=>{ const o=shuffleArr(["4","3","5"]); return mc3("Hình tứ giác có mấy cạnh?", o, o.indexOf("4")); };
-  const cutQ=()=>{ const o=shuffleArr(["2","3","4"]); return mc3("Cắt một hình chữ nhật theo đường chéo thì được mấy hình tam giác?", o, o.indexOf("2")); };
+  const cutQ=()=>{ const o=shuffleArr(["2","3","4"]); return Math.random()<0.5
+    ? mc3("Cắt một hình chữ nhật theo đường chéo thì được mấy hình tam giác?", o, o.indexOf("2"))
+    : mc3("Gấp hình vuông theo hai đường chéo rồi cắt theo nếp gấp thì được mấy hình tam giác?", o, o.indexOf("4")); };
 
   G.knt_hinh_co_ban={
     title:"Điểm, đoạn thẳng, đường thẳng, đường cong, ba điểm thẳng hàng",
@@ -419,14 +451,14 @@
           {say:`<b>Đường gấp khúc</b> gồm các <b>đoạn thẳng nối liền nhau</b>, đầu đoạn này là cuối đoạn kia. Hình bên là đường gấp khúc ABC gồm 2 đoạn thẳng AB và BC.`, vis:GEO.poly(['A','B','C'])},
           {say:`<b>Tính độ dài đường gấp khúc:</b> cộng độ dài các đoạn thẳng. Ví dụ AB = 5 cm, BC = 4 cm.`, vis:GEO.poly(['A','B','C'],[5,4])},
           {say:`Độ dài đường gấp khúc ABC là <b>5 + 4 = 9 (cm)</b>.`, vis:eq(`5 + 4 = 9 (cm)`)},
-          {say:`Đường gấp khúc ABCD có 3 đoạn thẳng. Nếu AB = 3 cm, BC = 4 cm, CD = 2 cm thì dài 3 + 4 + 2 = <b>9 cm</b>.`, vis:GEO.poly(['A','B','C','D'],[3,4,2])+eq(`3 + 4 + 2 = 9 (cm)`)},
+          {say:`Đường gấp khúc MNPQ có 3 đoạn thẳng: MN = 2 cm, NP = 5 cm, PQ = 3 cm. Độ dài là 2 cm + 5 cm + 3 cm = <b>10 cm</b>.`, vis:GEO.poly(['M','N','P','Q'],[2,5,3])+eq(`2 cm + 5 cm + 3 cm = 10 cm`)},
           {say:`<b>Hình tứ giác</b> là hình có <b>4 cạnh</b> và <b>4 đỉnh</b>. Ví dụ hình bên (đếm: 4 cạnh).`, vis:GEO.shape(4)},
           {say:`Để so sánh: hình có <b>3 cạnh</b> là hình tam giác, hình có <b>5 cạnh</b> là hình ngũ giác. Con luôn đếm số cạnh để biết đó là hình gì.`, vis:GEO.shape(3)+GEO.shape(5)},
         ]},
         ghiNho("Đường gấp khúc dài = tổng độ dài các đoạn thẳng. Hình tứ giác có 4 cạnh, 4 đỉnh.")
       ]},
     practice:[
-      {type:"fill", q:"Đường gấp khúc ABC có AB = 5 cm, BC = 4 cm. Đường gấp khúc dài bao nhiêu xăng-ti-mét?", answer:9, hint:"5 + 4", visual:GEO.poly(['A','B','C'],[5,4])},
+      {type:"fill", q:"Đường gấp khúc MNPQ có MN = 2 cm, NP = 5 cm, PQ = 3 cm. Đường gấp khúc dài bao nhiêu xăng-ti-mét?", answer:10, hint:"2 + 5 + 3", visual:GEO.poly(['M','N','P','Q'],[2,5,3])},
       {type:"fill", q:"Đường gấp khúc ABCD gồm mấy đoạn thẳng?", answer:3, visual:GEO.poly(['A','B','C','D'])},
       {type:"fill", q:"Hình tứ giác có mấy cạnh?", answer:4},
     ],
@@ -448,14 +480,15 @@
           {say:`<b>Vẽ đoạn thẳng dài 5 cm:</b> chấm điểm A trùng vạch 0 của thước, chấm điểm B ở vạch số <b>5</b>, rồi nối A với B.`, vis:strip(0,8,{0:'edge',1:'in',2:'in',3:'in',4:'in',5:'edge'})},
         ]},
         {type:"stepper", title:"Gấp, cắt, ghép hình", steps:[
-          {say:`<b>Gấp đôi</b> một tờ giấy hình chữ nhật rồi cắt theo nét gấp, ta được <b>2 hình chữ nhật bằng nhau</b>.`},
-          {say:`Cắt một hình chữ nhật theo <b>đường chéo</b> (nối hai đỉnh đối diện), ta được <b>2 hình tam giác</b>.`},
-          {say:`Ghép hai hình tam giác đó lại theo cạnh dài nhất, ta lại được hình chữ nhật. Cắt rồi ghép như vậy giúp con thấy một hình có thể tạo từ nhiều hình nhỏ.`},
+          {say:`<b>Hoạt động 1: gấp, cắt một hình chữ nhật thành 1 hình vuông và 1 hình chữ nhật.</b> Lấy một tờ giấy hình chữ nhật. Gấp một góc sao cho cạnh ngắn của tờ giấy trùng khít với một cạnh dài; chỗ gấp tạo thành một hình vuông ở một đầu tờ giấy.`},
+          {say:`Mở tờ giấy ra, dùng kéo cắt theo đường thẳng ở mép hình vuông đó. Ta được <b>1 hình vuông</b> và <b>1 hình chữ nhật</b>.`},
+          {say:`<b>Hoạt động 2: gấp, cắt một hình vuông thành 4 hình tam giác.</b> Gấp hình vuông theo một đường chéo, mở ra, rồi gấp theo đường chéo còn lại. Mở ra, cắt theo hai nếp gấp, ta được <b>4 hình tam giác</b> bằng nhau.`},
+          {say:`<b>Xếp hình:</b> dùng các hình tam giác vừa cắt để ghép thành những hình mới như con thuyền, ngôi nhà… Cắt rồi ghép giúp con thấy một hình có thể tạo từ nhiều hình nhỏ.`},
         ]},
       ]},
     practice:[
       {type:"fill", q:"Vẽ đoạn thẳng AB dài 5 cm. Đặt vạch 0 của thước trùng điểm A thì điểm B nằm ở vạch số mấy?", answer:5},
-      {type:"mc", q:"Cắt một hình chữ nhật theo đường chéo thì được mấy hình tam giác?", options:["2","3","4"], answer:0},
+      {type:"mc", q:"Gấp hình vuông theo hai đường chéo rồi cắt theo nếp gấp thì được mấy hình tam giác?", options:["4","2","3"], answer:0},
       {type:"fill", q:"Vẽ đoạn thẳng từ vạch 2 đến vạch 8 của thước. Đoạn thẳng dài mấy xăng-ti-mét?", answer:6, hint:"8 − 2"},
     ],
     test:[
@@ -517,7 +550,8 @@
     const o=["30 ngày","31 ngày"]; return two(`Tháng ${m} có bao nhiêu ngày?`, o, o.indexOf(d+' ngày'), {hint:"Các tháng 1, 3, 5, 7, 8, 10, 12 có 31 ngày; các tháng 4, 6, 9, 11 có 30 ngày"}); };
   const monthFacts=()=>{ const q=P([["Một tuần có bao nhiêu ngày?",7],["Một năm có bao nhiêu tháng?",12]]); return fillQ(q[0],q[1]); };
   const monthNext=()=>{ const m=R(1,11); return fillQ(`Sau tháng ${m} là tháng mấy? (Trả lời bằng số)`, m+1); };
-  const clockGens=[clockRead,clockHourOnly,hourDiff,hourAfter,minuteFacts,hour24,clockRead,clockRead];
+  const buoiQ=()=>{ const h=R(1,11), name=h<=6?"chiều":h<=9?"tối":"đêm"; return fillQ(`${h} giờ ${name} còn gọi là mấy giờ (đếm theo 24 giờ)?`, h+12, {hint:`${h} + 12`}); };
+  const clockGens=[clockRead,clockHourOnly,hourDiff,hourAfter,minuteFacts,hour24,clockRead,clockRead,buoiQ];
   const calGens=[weekdayNext,weekdayCalc,daysOfMonth,monthFacts,monthNext,weekdayCalc];
 
   G.knt_ngay_gio={
@@ -532,6 +566,13 @@
           {say:`<b>15 phút:</b> kim dài chỉ số <b>3</b>. Hình này là <b>3 giờ 15 phút</b>.`, vis:clockSvg(3,15,130)},
           {say:`<b>30 phút:</b> kim dài chỉ số <b>6</b>. Hình này là <b>3 giờ 30 phút</b> (còn nói là <b>3 giờ rưỡi</b>).`, vis:clockSvg(3,30,130)},
           {say:`<b>Giờ buổi chiều, tối:</b> sau 12 giờ trưa, đồng hồ điện tử đếm tiếp 13 giờ, 14 giờ… Vì vậy <b>13 giờ = 1 giờ chiều</b>, <b>15 giờ = 3 giờ chiều</b>. (Muốn đổi, lấy số giờ trừ đi 12.)`, vis:eq(`15 giờ = 15 − 12 = 3 giờ chiều`)},
+        ]},
+        {type:"stepper", title:"Các buổi trong ngày", steps:[
+          {say:`Một ngày được chia thành các buổi: <b>sáng, trưa, chiều, tối, đêm</b>. Một ngày bắt đầu từ <b>12 giờ đêm</b> hôm trước đến <b>12 giờ đêm</b> hôm sau, tất cả là <b>24 giờ</b>.`},
+          {say:`<b>Buổi sáng:</b> từ 1 giờ sáng đến 10 giờ sáng. <b>Buổi trưa:</b> 11 giờ trưa, 12 giờ trưa.`, vis:chips(['1 giờ sáng … 10 giờ sáng'],'c')+chips(['11 giờ trưa','12 giờ trưa'],'b')},
+          {say:`<b>Buổi chiều:</b> từ 1 giờ chiều (13 giờ) đến 6 giờ chiều (18 giờ).`, vis:chips(['1 giờ chiều = 13 giờ','2 giờ chiều = 14 giờ','3 giờ chiều = 15 giờ','6 giờ chiều = 18 giờ'],'c')},
+          {say:`<b>Buổi tối:</b> 7 giờ tối (19 giờ), 8 giờ tối (20 giờ), 9 giờ tối (21 giờ). <b>Ban đêm:</b> 10 giờ đêm (22 giờ), 11 giờ đêm (23 giờ), 12 giờ đêm (24 giờ).`, vis:chips(['7 giờ tối = 19 giờ','8 giờ tối = 20 giờ','9 giờ tối = 21 giờ'],'b')+chips(['10 giờ đêm = 22 giờ','11 giờ đêm = 23 giờ','12 giờ đêm = 24 giờ'],'r')},
+          {say:`<b>Cách đổi:</b> buổi chiều, tối, đêm thì lấy số giờ cộng thêm <b>12</b> (hoặc lấy số giờ trừ <b>12</b> để đổi ngược lại).`, vis:eq(`3 giờ chiều = 3 + 12 = 15 giờ`)},
         ]},
         {type:"clock", h:3, m:0, text:"Con tự xoay kim: bấm + giờ / − giờ và chọn số phút."},
         ghiNho("Kim ngắn chỉ giờ, kim dài chỉ phút. 1 giờ = 60 phút. 1 ngày = 24 giờ.")
@@ -560,13 +601,13 @@
           {say:`<b>Tháng 2</b> chỉ có <b>28 ngày</b> (năm nhuận thì có 29 ngày).`},
           {say:`<b>Tìm thứ của một ngày:</b> cứ cách <b>7 ngày</b> thì lặp lại cùng một thứ. Nếu ngày 5 là Thứ năm thì ngày 12 (cách 7 ngày) cũng là Thứ năm, ngày 13 là Thứ sáu.`, vis:eq(`ngày 5 và ngày 12 cùng là Thứ năm<br>ngày 13 là Thứ sáu`)},
         ]},
-        {type:"calendar", start:2, days:31, title:"Lịch một tháng có 31 ngày (ví dụ). Bấm vào một ngày:"},
+        {type:"calendar", start:0, days:30, title:"Tờ lịch tháng mười một (có 30 ngày), ngày 1 là Thứ hai. Bấm vào một ngày để xem thứ:"},
         ghiNho("Tuần 7 ngày. Năm 12 tháng. Tháng 1,3,5,7,8,10,12 có 31 ngày; tháng 4,6,9,11 có 30 ngày; tháng 2 có 28 (hoặc 29) ngày.")
       ]},
     practice:[
       {type:"fill", q:"Một tuần có bao nhiêu ngày?", answer:7},
       {type:"mc", q:"Tháng 4 có bao nhiêu ngày?", options:["30 ngày","31 ngày"], answer:0, two:true},
-      {type:"mc", q:"Sau Thứ ba là ngày nào?", options:["Thứ tư","Thứ hai","Thứ năm","Thứ sáu"], answer:0},
+      {type:"mc", q:"Tháng mười một có ngày 1 là Thứ hai. Vậy ngày 20 là thứ mấy?", options:["Thứ bảy","Thứ sáu","Chủ nhật","Thứ hai"], answer:0, hint:"Ngày 1 và ngày 15 cùng là Thứ hai; ngày 20 hơn ngày 15 năm ngày"},
     ],
     test:[
       {type:"fill", q:"Một năm có bao nhiêu tháng?", answer:12},
@@ -929,7 +970,7 @@
     learn:FLIP("Lật 5 trang để ôn lại toàn bộ kiến thức Toán lớp 2.",[
       pageOf("Số và phép tính trong phạm vi 100",[
         {type:"stepper", title:"Nhớ lại", steps:[
-          {say:`Cộng, trừ có nhớ: tính từ phải sang trái, nhớ 1 hoặc mượn 1.`, vis:col(46,28,'+',2)},
+          {say:`Cộng, trừ có nhớ: tính từ phải sang trái, viết kết quả rồi nhớ 1.`, vis:col(46,28,'+',2)},
           {say:`<b>46 + 28 = 74</b>; <b>52 − 18 = 34</b>.`, vis:eq(`46 + 28 = 74<br>52 − 18 = 34`)}]}]),
       pageOf("Số và phép tính trong phạm vi 1 000",[
         {type:"stepper", title:"Nhớ lại", steps:[

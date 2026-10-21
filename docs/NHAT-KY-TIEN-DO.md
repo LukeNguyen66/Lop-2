@@ -5,6 +5,36 @@
 
 ## TRẠNG THÁI HIỆN TẠI
 
+**🆕 ĐỐI CHIẾU LẠI VỚI 4 CUỐN SGK THẬT (sửa sai sót của các đợt trước):**
+- **Sách có sẵn trong máy:** `D:\Drive - Loc\My Drive\Claude Code\Lop2\02-Tai nguyen\` gồm 4 file PDF:
+  `Toan-2-KNTT-tap-1.pdf`, `Toan-2-KNTT-tap-2.pdf`, `TiengViet-2-KNTT-tap-1.pdf`, `TiengViet-2-KNTT-tap-2.pdf`.
+  **Trang PDF = số trang in + 1** (cả 4 cuốn). Đọc bằng PyMuPDF (`pip install pymupdf`): render từng trang ra JPG rồi xem.
+  Các đợt trước (GĐ2, GĐ3) từng ghi nhầm "chưa có bản scan SGK" — **sai**; đã sửa.
+- **Tiếng Việt: khung chương làm lại 100% theo MỤC LỤC thật.** Tập 1 có 4 chủ điểm (Em lớn lên từng ngày;
+  Đi học vui sao; Niềm vui tuổi thơ; Mái ấm gia đình) + Tuần 9 ôn giữa HK1 + Tuần 18 ôn cuối HK1. Tập 2 có
+  5 chủ điểm (Vẻ đẹp quanh em; Hành tinh xanh của em; Giao tiếp và kết nối; Con người Việt Nam; Việt Nam quê
+  hương em) + Tuần 27 + Tuần 35. Mỗi bài trong app = phần LUYỆN TẬP / chính tả / viết của đúng "Bài N" trong sách
+  (các bài Đọc, Viết chữ hoa, Nói và nghe CHƯA có trong app). Đã tạo thêm **28 bài mới** trong
+  `js/content-tv-sgk.js` (nạp sau content-gd3.js): Tập 1: Bài 8, 10, 12, 18, 20, 22, 24, 26, 28, 30, 32 + 2 bài ôn
+  lật trang; Tập 2: Bài 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30 + 2 bài ôn lật trang. Dùng đúng các
+  CẶP chính tả và CHỦ ĐỀ vốn từ mà mục lục sách nêu; câu ví dụ, câu điền chỗ trống, đoạn viết mẫu đều do trợ lý
+  tự soạn (không chép bài đọc của SGK vì bản quyền). Các bài cũ tự bịa ngoài mục lục (ví dụ "Từ trái nghĩa",
+  "Luyện viết đoạn văn ngắn", "Chủ điểm 4-8") **đã gỡ khỏi khung chương** (mã vẫn còn trong file, chỉ không còn
+  được nối vào `key`).
+- **Toán: đã đối chiếu và sửa các chỗ lệch với sách:** cách nói "nhớ" khi trừ có nhớ (sách nói "lấy 12 trừ 7 bằng 5,
+  viết 5, nhớ 1; 3 trừ 1 bằng 2" chứ không nói "mượn"); dùng đúng ví dụ chính của sách ở Chủ đề 4 (35 + 7, 36 + 17,
+  32 − 7, 42 − 15); Bài 7 thêm cách "đếm tiếp", Bài 11 thêm cách "đếm lùi"; Bài 8 bảng cộng đủ như sách (kể cả
+  5+6 … 2+9); Bài 15 mở đầu bằng cân đĩa (nặng hơn / nhẹ hơn / nặng bằng), Bài 16 thêm "chứa nhiều hơn / ít hơn",
+  Bài 17 thêm các loại cân; Bài 26 dùng ví dụ MNPQ (2 cm + 5 cm + 3 cm = 10 cm); Bài 27 thay bằng hai hoạt động gấp –
+  cắt trong sách (chữ nhật → vuông + chữ nhật; vuông → 4 tam giác); Bài 29 thêm bảng các buổi trong ngày; Bài 30
+  dùng tờ lịch tháng mười một (30 ngày, ngày 1 là Thứ hai); Bài 38 / 42 thêm "2 × 3 cũng gọi là tích", "6 : 2 cũng
+  gọi là thương".
+- **CHƯA đối chiếu:** phần lớn Toán Tập 2 chi tiết (đã xem Chủ đề 8–13 ở mức mục lục + vài trang mẫu, khớp), Toán
+  Chủ đề 1, 14 (ôn tập); các bài còn lại vẫn giữ nhãn "bản nháp" cho bố mẹ rà soát.
+- **Lỗi kỹ thuật cần nhớ:** file `content-*.js` chạy TRƯỚC engine.js nên **không được gọi `shuffleArr / randInt`
+  lúc nạp file** (chỉ gọi bên trong hàm `gen`). Node-harness định nghĩa sẵn các hàm này nên không bắt được lỗi
+  này — luôn kiểm tra thêm trong trình duyệt thật.
+
 **🆕 GIAI ĐOẠN 3 — MỞ KHOÁ HẾT CÁC BÀI CÒN LẠI (98/98 bài trong khung chương đã có nội dung):**
 Thêm 39 bài mới trong file `js/content-gd3.js` (nạp sau learn-steps.js, trước engine.js; tự gắn `key` vào
 khung chương theo tiêu đề bài qua bảng KEYMAP ở cuối file). Gồm:
@@ -23,8 +53,7 @@ khung chương theo tiêu đề bài qua bảng KEYMAP ở cuối file). Gồm:
   (content-tap2.js).
 - **Bổ sung:** thêm ngân hàng câu cho 2 bài chính tả cũ (tr/ch, s/x) vì trước chỉ sinh được 8–9 câu khác
   nhau/lượt (thiếu so với mức 10 câu).
-- **Lưu ý trung thực:** vẫn chưa có bản scan SGK → nội dung bám tên bài trong khung chương + kiến thức chuẩn,
-  giữ nhãn "bản nháp". Đồng hồ chỉ dùng giờ đúng, 15 phút, 30 phút (giờ rưỡi); tháng 2 ghi 28 (hoặc 29) ngày.
+- **Lưu ý (đã sửa ở mục trên):** ban đầu ghi nhầm là chưa có bản scan SGK; sách thật có trong thư mục `02-Tai nguyen`. Nội dung GĐ3 giữ nhãn "bản nháp". Đồng hồ chỉ dùng giờ đúng, 15 phút, 30 phút (giờ rưỡi); tháng 2 ghi 28 (hoặc 29) ngày.
 - **Đã kiểm tra:** stress-test 323.000+ câu sinh ngẫu nhiên (đáp án tính lại, lựa chọn không trùng) — 0 lỗi;
   kiểm tra tự động mọi phép tính trong lời hướng dẫn — 0 lỗi; smoke-test trình duyệt 98 bài (151 khối hướng
   dẫn, 196 lượt luyện tập/kiểm tra) — 0 lỗi, không lỗi console.

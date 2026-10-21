@@ -112,47 +112,72 @@ const CURRICULUM = {
   },
   tv: {
     name:"Tiếng Việt",
+    // Khung chương theo MỤC LỤC SGK Tiếng Việt 2 (Kết nối tri thức) — mỗi bài ở đây là phần LUYỆN TẬP / chính tả / viết của đúng "Bài N" trong sách
+    // (các bài Đọc, Viết chữ hoa, Nói và nghe chưa có trong ứng dụng).
     chapters:[
-      // ===== TẬP 1 — 8 chủ điểm (đã đối chiếu mục lục sách thật) =====
+      // ===== TẬP 1 — 4 chủ điểm =====
       { ch:"Tập 1 · Chủ điểm 1: Em lớn lên từng ngày (Tuần 1-4)", tap:1, bai:[
-        {t:"Bảng chữ cái", key:"tv_bang_chu_cai"},
-        {t:"Từ chỉ sự vật, chỉ hoạt động; Câu giới thiệu (Ai là gì?)", key:"tv_su_vat_hoatdong_gioithieu"},
-        {t:"Từ chỉ hoạt động; Câu nêu hoạt động (Ai làm gì?)", key:"tv_hoatdong_neuhoatdong"},
-        {t:"Từ chỉ đặc điểm; Câu nêu đặc điểm (Ai thế nào?)", key:"tv_dacdiem_neudacdiem"},
+        {t:"Bài 2. Bảng chữ cái", key:"tv_bang_chu_cai"},
+        {t:"Bài 2. Từ chỉ sự vật, hoạt động; Câu giới thiệu (Ai là gì?)", key:"tv_su_vat_hoatdong_gioithieu"},
+        {t:"Bài 4. Từ chỉ sự vật, hoạt động; Câu nêu hoạt động (Ai làm gì?)", key:"tv_hoatdong_neuhoatdong"},
+        {t:"Bài 6. Từ chỉ đặc điểm; Câu nêu đặc điểm (Ai thế nào?)", key:"tv_dacdiem_neudacdiem"},
+        {t:"Bài 8. Viết hoa tên người; Câu nêu hoạt động; Viết đoạn kể về hoạt động thể thao, trò chơi", key:"tv1_b08"},
       ]},
       { ch:"Tập 1 · Chủ điểm 2: Đi học vui sao (Tuần 5-8)", tap:1, bai:[
-        {t:"Chính tả: Phân biệt c/k, ch/tr, v/d; Từ ngữ, câu nêu hoạt động", key:"tv_trch"},
-        {t:"Chính tả: Phân biệt g/gh, s/x, hỏi/ngã; Từ ngữ, câu nêu đặc điểm", key:"tv_sx"},
-        {t:"Chính tả: Phân biệt ng/ngh, r/d/gi, an/ang; Dấu chấm, dấu chấm hỏi"},
-        {t:"Chính tả: Phân biệt l/n, ăn/ăng, ân/âng; Từ ngữ, câu nêu đặc điểm"},
+        {t:"Bài 10. Chính tả: c/k, ch/tr, v/d; Câu nêu hoạt động; Viết thời gian biểu", key:"tv1_b10"},
+        {t:"Bài 12. Chính tả: g/gh, s/x, hỏi/ngã; Câu nêu đặc điểm; Lập danh sách học sinh", key:"tv1_b12"},
+        {t:"Bài 14. Chính tả: ng/ngh, r/d/gi, an/ang; Dấu chấm, dấu chấm hỏi", key:"tv1_chinhta_ngngh"},
+        {t:"Bài 16. Chính tả: l/n, ăn/ăng, ân/âng; Câu nêu đặc điểm", key:"tv1_chinhta_lnan"},
+      ]},
+      { ch:"Tuần 9 · Ôn tập giữa học kì 1", tap:1, bai:[
+        {t:"Ôn tập giữa học kì 1 (lật trang)", key:"tv1_on_giuaki1"},
       ]},
       { ch:"Tập 1 · Chủ điểm 3: Niềm vui tuổi thơ (Tuần 10-13)", tap:1, bai:[
-        {t:"Mở rộng vốn từ: Tình cảm bạn bè; Dấu chấm, dấu chấm hỏi, dấu chấm than"},
-        {t:"Từ ngữ chỉ đặc điểm, hoạt động; Câu nêu hoạt động"},
+        {t:"Bài 18. Chính tả: c/k, iêu/ưu, en/eng; Vốn từ tình cảm bạn bè; Dấu chấm, chấm hỏi, chấm than", key:"tv1_b18"},
+        {t:"Bài 20. Chính tả: g/gh, iu/ưu, iên/iêng; Từ chỉ đặc điểm, hoạt động; Viết đoạn kể một giờ chơi", key:"tv1_b20"},
+        {t:"Bài 22. Chính tả: ng/ngh, ch/tr, uôn/uông; Từ chỉ sự vật; Câu nêu đặc điểm; Giới thiệu đồ chơi", key:"tv1_b22"},
+        {t:"Bài 24. Chính tả: d/gi, s/x, ươn/ương; Dấu phẩy; Viết đoạn tả đồ chơi", key:"tv1_b24"},
       ]},
-      { ch:"Tập 1 · Chủ điểm 4-8 (chưa đối chiếu mục lục sách thật)", tap:1, bai:[
-        {t:"Mở rộng vốn từ theo chủ điểm"},
-        {t:"Câu nêu đặc điểm (Ai thế nào?)"},
-        {t:"Ôn tập dấu câu tập 1"},
+      { ch:"Tập 1 · Chủ điểm 4: Mái ấm gia đình (Tuần 14-17)", tap:1, bai:[
+        {t:"Bài 26. Chính tả: iên/yên/uyên, r/d/gi, ai/ay; Vốn từ về gia đình; Câu nêu đặc điểm", key:"tv1_b26"},
+        {t:"Bài 28. Viết hoa tên địa lí; Chính tả: l/n, ao/au; Tình cảm gia đình; Dấu chấm, chấm hỏi, chấm than", key:"tv1_b28"},
+        {t:"Bài 30. Chính tả: ch/tr, at/ac; Từ chỉ sự vật, hoạt động; Câu nêu hoạt động", key:"tv1_b30"},
+        {t:"Bài 32. Chính tả: iu/ưu, ât/âc; Vốn từ tình cảm gia đình; Dấu phẩy; Viết tin nhắn", key:"tv1_b32"},
       ]},
-      // ===== TẬP 2 — 8 chủ điểm =====
-      { ch:"Tập 2 · Chủ điểm 1: Vẻ đẹp quanh em", tap:2, bai:[
-        {t:"Chính tả: vần khó, phân biệt âm dễ nhầm", key:"tv2_chinhta_vankho"},
-        {t:"Mở rộng vốn từ: Thiên nhiên, cây cối", key:"tv2_von_tu_thiennhien"},
+      { ch:"Tuần 18 · Ôn tập và Đánh giá cuối học kì 1", tap:1, bai:[
+        {t:"Ôn tập cuối học kì 1 (lật trang)", key:"tv1_on_cuoiki1"},
       ]},
-      { ch:"Tập 2 · Chủ điểm 2: Hành tinh xanh của em", tap:2, bai:[
-        {t:"Từ chỉ sự vật, hoạt động, đặc điểm (ôn)", key:"tv2_on_tu_loai"},
-        {t:"Dấu phẩy", key:"tv2_dau_phay"},
+      // ===== TẬP 2 — 5 chủ điểm =====
+      { ch:"Tập 2 · Chủ điểm 1: Vẻ đẹp quanh em (Tuần 19-22)", tap:2, bai:[
+        {t:"Bài 2. Chính tả: c/k, ch/tr, ac/at; Vốn từ các mùa; Viết đoạn tả đồ vật", key:"tv2_b02"},
+        {t:"Bài 4. Chính tả: g/gh, s/x, uc/ut; Vốn từ ngày Tết; Viết thiệp chúc Tết", key:"tv2_b04"},
+        {t:"Bài 6. Chính tả: ng/ngh, r/d/gi, ưc/ưt; Vốn từ cây cối; Viết đoạn kể chăm sóc cây", key:"tv2_b06"},
+        {t:"Bài 8. Chính tả: uynh/uych, l/n, iêt/iêc; Vốn từ thiên nhiên; Kể một sự việc em chứng kiến", key:"tv2_b08"},
       ]},
-      { ch:"Tập 2 · Chủ điểm 3: Giao tiếp và kết nối", tap:2, bai:[
-        {t:"Câu và các loại câu", key:"tv2_cac_loai_cau"},
-        {t:"Dấu chấm than", key:"tv2_dau_cham_than"},
+      { ch:"Tập 2 · Chủ điểm 2: Hành tinh xanh của em (Tuần 23-26)", tap:2, bai:[
+        {t:"Bài 10. Chính tả: uya/uyu, iêu/ươu, uôt/uôc; Vốn từ muông thú; Dấu chấm, chấm hỏi, chấm than", key:"tv2_b10"},
+        {t:"Bài 12. Chính tả: d/gi, iu/ưu, ươc/ươt; Vốn từ vật nuôi; Câu nêu đặc điểm loài vật", key:"tv2_b12"},
+        {t:"Bài 14. Chính tả: ng/ngh, tr/ch, êt/êch; Vốn từ bảo vệ môi trường; Dấu phẩy; Lời xin lỗi", key:"tv2_b14"},
+        {t:"Bài 16. Chính tả: oanh/oach, s/x, hỏi/ngã; Vốn từ loài vật nhỏ bé; Viết về bảo vệ môi trường", key:"tv2_b16"},
       ]},
-      { ch:"Tập 2 · Chủ điểm 4-8 (Con người, Đất nước, Trái đất...)", tap:2, bai:[
-        {t:"Mở rộng vốn từ theo chủ điểm", key:"tv2_vontu_chudiem"},
-        {t:"Từ trái nghĩa", key:"tv2_trai_nghia"},
-        {t:"Luyện viết đoạn văn ngắn", key:"tv2_viet_doan"},
-        {t:"Ôn tập cuối năm Tiếng Việt", key:"tv2_on_tap_cuoi_nam"},
+      { ch:"Tuần 27 · Ôn tập giữa học kì 2", tap:2, bai:[
+        {t:"Ôn tập giữa học kì 2 (lật trang)", key:"tv2_on_giuaki2"},
+      ]},
+      { ch:"Tập 2 · Chủ điểm 3: Giao tiếp và kết nối (Tuần 28-29)", tap:2, bai:[
+        {t:"Bài 18. Chính tả: d/gi, ch/tr, hỏi/ngã; Luyện tập dấu câu; Giới thiệu đồ dùng học tập", key:"tv2_b18"},
+        {t:"Bài 20. Chính tả: eo/oe, l/n, ên/ênh; Vốn từ giao tiếp, kết nối; Dấu chấm, dấu phẩy", key:"tv2_b20"},
+      ]},
+      { ch:"Tập 2 · Chủ điểm 4: Con người Việt Nam (Tuần 30-31)", tap:2, bai:[
+        {t:"Bài 22. Chính tả: d/gi, s/x, ip/iêp; Vốn từ nghề nghiệp; Viết lời cảm ơn", key:"tv2_b22"},
+        {t:"Bài 24. Viết hoa tên người; Chính tả: iu/ưu, im/iêm; Vốn từ về Bác Hồ và nhân dân", key:"tv2_b24"},
+      ]},
+      { ch:"Tập 2 · Chủ điểm 5: Việt Nam quê hương em (Tuần 32-34)", tap:2, bai:[
+        {t:"Bài 26. Viết hoa tên địa lí; Chính tả: ch/tr, iu/iêu; Vốn từ sản phẩm truyền thống; Câu giới thiệu", key:"tv2_b26"},
+        {t:"Bài 28. Chính tả: it/uyt, ươu/iêu, in/inh; Vốn từ loài vật dưới biển; Kể một buổi đi chơi", key:"tv2_b28"},
+        {t:"Bài 30. Viết hoa tên địa lí; Chính tả: r/d/gi, hỏi/ngã; Vốn từ nghề nghiệp; Kể về công việc của một người", key:"tv2_b30"},
+      ]},
+      { ch:"Tuần 35 · Ôn tập và Đánh giá cuối học kì 2", tap:2, bai:[
+        {t:"Ôn tập cuối học kì 2 (lật trang)", key:"tv2_on_tap_cuoi_nam"},
       ]},
     ]
   }

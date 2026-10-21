@@ -106,8 +106,8 @@
         carry=nc;
       } else {
         const eff=da-carry;
-        if(eff>=db){ say=`Hàng <b>${DIGNAME[k]}</b>: ${carry?`${da} đã cho mượn 1 nên còn ${eff}; `:''}${eff} − ${db} = ${eff-db}. Viết <b>${eff-db}</b>.`; carry=0; }
-        else { say=`Hàng <b>${DIGNAME[k]}</b>: ${carry?`${da} đã cho mượn 1 nên còn ${eff}; `:''}${eff} nhỏ hơn ${db}, không trừ được. <b>Mượn 1</b> ở hàng ${DIGNAME[k+1]} được ${eff+10}: ${eff+10} − ${db} = ${eff+10-db}. Viết <b>${eff+10-db}</b>.`; carry=1; }
+        if(eff>=db){ say=`Hàng <b>${DIGNAME[k]}</b>: ${carry?`${da} trừ 1 (nhớ) bằng ${eff}; `:''}${eff} − ${db} = ${eff-db}. Viết <b>${eff-db}</b>.`; carry=0; }
+        else { say=`Hàng <b>${DIGNAME[k]}</b>: ${carry?`${da} trừ 1 (nhớ) bằng ${eff}; `:''}${eff} không trừ được ${db}. Lấy <b>${eff+10}</b> trừ ${db} bằng ${eff+10-db}. Viết <b>${eff+10-db}</b>, <b>nhớ 1</b> sang hàng ${DIGNAME[k+1]}.`; carry=1; }
       }
       steps.push({say, vis:col(a,b,op,k+1)});
     }
@@ -243,6 +243,11 @@
     blocks:[
       {type:"stepper", title:"Ví dụ 1: 9 + 5", steps:congQua10(9,5)},
       {type:"stepper", title:"Ví dụ 2: 8 + 6", steps:congQua10(8,6)},
+      {type:"stepper", title:"Cách khác: đếm tiếp (9 + 5)", steps:[
+        {say:`Muốn tính <b>9 + 5</b>, ta giữ số <b>9</b> trong đầu rồi <b>đếm tiếp 5 số</b> sau số 9.`, vis:eq(`9 + 5 = ?`)},
+        {say:`Đếm tiếp: <b>10, 11, 12, 13, 14</b> (vừa đếm vừa gập ngón tay, đủ 5 ngón thì dừng).`, vis:chips(['10','11','12','13','14'],'c')},
+        {say:`Dừng ở số <b>14</b>. Vậy <b>9 + 5 = 14</b>. Cách này nhanh khi số hạng thứ hai nhỏ.`, vis:eq(`9 + 5 = 14`)},
+      ]},
       {type:"example", html:"<b>Cách làm (3 việc):</b><br>① Xem số thứ nhất còn thiếu mấy thì đủ 10.<br>② Tách số thứ hai thành (phần thiếu) + (phần còn lại).<br>③ Cộng cho đủ 10, rồi cộng thêm phần còn lại."}
     ]};
 
@@ -255,12 +260,15 @@
         {say:`Quy luật khi cộng với 9: <b>chữ số hàng đơn vị của kết quả bé hơn số hạng kia đúng 1 đơn vị</b>. Ví dụ: 9 + 4 = 13, chữ số hàng đơn vị là 3 (bé hơn 4 một đơn vị); 9 + 7 = 16, chữ số hàng đơn vị là 6 (bé hơn 7 một đơn vị).`},
         {say:`Với <b>8</b>: thiếu 2 để đủ 10. Ví dụ <b>8 + 5</b>: tách 5 = 2 + 3, rồi 8 + 2 = 10, 10 + 3 = 13.`, vis:eq(`8 + 5 = 8 + 2 + 3 = 13`)},
         {say:`Với <b>7</b>: thiếu 3 để đủ 10. Ví dụ <b>7 + 6</b>: tách 6 = 3 + 3, rồi 7 + 3 = 10, 10 + 3 = 13.`, vis:eq(`7 + 6 = 7 + 3 + 3 = 13`)},
-        {say:`Vì đổi chỗ hai số hạng thì tổng không đổi, nên 9 + 4 = 4 + 9 = 13. Con chỉ cần nhớ các phép cộng có số thứ nhất lớn hơn hoặc bằng số thứ hai.`},
+        {say:`Vì đổi chỗ hai số hạng thì tổng không đổi, nên 9 + 4 = 4 + 9 = 13. Trong bảng có cả 5 + 6 và 6 + 5 nhưng cùng bằng 11, nên học được phép này là suy ra được phép kia.`},
       ]},
       {type:"example", html:"<b>Cùng cộng với 9:</b> "+[2,3,4,5,6,7,8,9].map(b=>`9 + ${b} = ${9+b}`).join(' &nbsp;·&nbsp; ')},
       {type:"example", html:"<b>Cùng cộng với 8:</b> "+[3,4,5,6,7,8,9].map(b=>`8 + ${b} = ${8+b}`).join(' &nbsp;·&nbsp; ')},
       {type:"example", html:"<b>Cùng cộng với 7:</b> "+[4,5,6,7,8,9].map(b=>`7 + ${b} = ${7+b}`).join(' &nbsp;·&nbsp; ')},
       {type:"example", html:"<b>Cùng cộng với 6:</b> "+[5,6,7,8,9].map(b=>`6 + ${b} = ${6+b}`).join(' &nbsp;·&nbsp; ')},
+      {type:"example", html:"<b>Cùng cộng với 5:</b> "+[6,7,8,9].map(b=>`5 + ${b} = ${5+b}`).join(' &nbsp;·&nbsp; ')},
+      {type:"example", html:"<b>Cùng cộng với 4:</b> "+[7,8,9].map(b=>`4 + ${b} = ${4+b}`).join(' &nbsp;·&nbsp; ')},
+      {type:"example", html:"<b>Cùng cộng với 3 và 2:</b> "+[8,9].map(b=>`3 + ${b} = ${3+b}`).concat(['2 + 9 = 11']).join(' &nbsp;·&nbsp; ')},
       ghiNho("Quên kết quả thì không sao: làm đủ 10 là tìm lại được ngay.")
     ]};
 
@@ -288,6 +296,11 @@
     blocks:[
       {type:"stepper", title:"Ví dụ 1: 14 − 6", steps:truQua10(14,6)},
       {type:"stepper", title:"Ví dụ 2: 15 − 8", steps:truQua10(15,8)},
+      {type:"stepper", title:"Cách khác: đếm lùi (14 − 5)", steps:[
+        {say:`Muốn tính <b>14 − 5</b>, ta bắt đầu từ số <b>14</b> rồi <b>đếm lùi 5 số</b>.`, vis:eq(`14 − 5 = ?`)},
+        {say:`Đếm lùi: <b>13, 12, 11, 10, 9</b> (đếm 5 số, vừa đếm vừa gập ngón tay).`, vis:chips(['13','12','11','10','9'],'r')},
+        {say:`Dừng ở số <b>9</b>. Vậy <b>14 − 5 = 9</b>. Cách này nhanh khi số trừ nhỏ.`, vis:eq(`14 − 5 = 9`)},
+      ]},
       {type:"example", html:"<b>Cách làm (3 việc):</b><br>① Tách số bị trừ thành <b>10 + số lẻ</b> (ví dụ 14 = 10 + 4).<br>② Lấy <b>10 trừ số trừ</b>.<br>③ Cộng kết quả với <b>số lẻ</b> đã tách."}
     ]};
 
@@ -358,6 +371,7 @@
         {say:`Ta có phép nhân:`, vis:grp(2,3,'r')+eq(`2 × 3 = 6`)},
         {say:`<b>2</b> và <b>3</b> là hai số em đem nhân với nhau. Chúng gọi là <b>thừa số</b>.`, vis:eq(`${N(2,'a')} × ${N(3,'b')} = 6`)+`<div style="text-align:center">${tag('thừa số')} &nbsp; ${tag('thừa số','b')}</div>`},
         {say:`<b>6</b> là kết quả của phép nhân. Nó gọi là <b>tích</b>.`, vis:eq(`2 × 3 = ${N(6,'c')}`)+`<div style="text-align:center">${tag('tích','c')}</div>`},
+        {say:`Chú ý: biểu thức <b>2 × 3</b> cũng gọi là <b>tích</b>. Vậy “tích” là tên của kết quả (6) và cũng là tên của cả phép tính 2 × 3.`, vis:eq(`${N(2,'a')} × ${N(3,'b')} &nbsp;(cũng gọi là ${tag('tích','c')})`)},
         {say:`Nhớ lại bằng một dòng:`, vis:eq(`Thừa số × Thừa số = Tích`)},
         {say:`Thử với <b>5 × 4 = 20</b>: thừa số là 5 và 4, tích là 20. Ta cũng nói: "Tích của 5 và 4 là 20".`, vis:eq(`${N(5,'a')} × ${N(4,'b')} = ${N(20,'c')}`)},
       ]},
@@ -404,6 +418,7 @@
         {say:`<b>6</b> là số đem đi chia. Nó gọi là <b>số bị chia</b>.`, vis:eq(`${N(6,'a')} : 2 = 3`)},
         {say:`<b>2</b> là số dùng để chia (chia thành 2 phần). Nó gọi là <b>số chia</b>.`, vis:eq(`6 : ${N(2,'b')} = 3`)},
         {say:`<b>3</b> là kết quả của phép chia. Nó gọi là <b>thương</b>.`, vis:eq(`6 : 2 = ${N(3,'c')}`)},
+        {say:`Chú ý: biểu thức <b>6 : 2</b> cũng gọi là <b>thương</b>. Vậy “thương” là tên của kết quả (3) và cũng là tên của cả phép tính 6 : 2.`, vis:eq(`6 : 2 &nbsp;(cũng gọi là ${tag('thương','c')})`)},
         {say:`Nhớ lại bằng một dòng:`, vis:eq(`Số bị chia : Số chia = Thương`)},
       ]},
       {type:"stepper", title:"Phép nhân và phép chia đi cùng nhau", steps:[
@@ -629,7 +644,7 @@
     ]};
 
   LEARN.knt_tru1000={
-    intro:"Trừ các số có ba chữ số, không nhớ (không phải mượn): đặt tính thẳng cột, trừ từ phải sang trái. Con xem từng cột nhé!",
+    intro:"Trừ các số có ba chữ số, không nhớ: đặt tính thẳng cột, trừ từ phải sang trái. Con xem từng cột nhé!",
     blocks:[
       {type:"stepper", title:"578 − 346", steps:tinhCot(578,346,'-')},
       {type:"stepper", title:"Thêm ví dụ: 849 − 325", steps:tinhCot(849,325,'-')},
@@ -639,13 +654,13 @@
     ]};
 
   LEARN.knt_tru1000n={
-    intro:"Trừ có nhớ (có mượn): khi chữ số ở trên nhỏ hơn chữ số ở dưới, ta mượn 1 ở hàng liền trước. Con xem từng cột nhé!",
+    intro:"Trừ có nhớ: khi chữ số ở trên nhỏ hơn chữ số ở dưới, ta lấy thêm 10 để trừ, viết kết quả rồi nhớ 1 sang hàng liền trước. Con xem từng cột nhé!",
     blocks:[
-      {type:"stepper", title:"432 − 158 (mượn ở hai cột)", steps:tinhCot(432,158,'-')},
+      {type:"stepper", title:"432 − 158 (nhớ ở hai cột)", steps:tinhCot(432,158,'-')},
       {type:"stepper", title:"Thêm ví dụ: 625 − 287", steps:tinhCot(625,287,'-')},
       {type:"concept", text:"Con tự xem hoạt hình đặt tính và bấm từng bước:", big:""},
       {type:"vcalc"},
-      ghiNho("Mượn 1 ở hàng liền trước nghĩa là 1 chục thành 10 đơn vị (hoặc 1 trăm thành 10 chục). Hàng đã cho mượn thì nhớ bớt đi 1 khi trừ.")
+      ghiNho("Khi không trừ được, ta lấy thêm 10 (1 chục thành 10 đơn vị, hoặc 1 trăm thành 10 chục), viết kết quả và <b>nhớ 1</b>. Sang hàng bên trái, nhớ lấy số ở trên <b>trừ đi 1</b> rồi mới trừ tiếp.")
     ]};
 
   /* ======================== CHỦ ĐỀ 13: THỐNG KÊ, XÁC SUẤT ======================== */

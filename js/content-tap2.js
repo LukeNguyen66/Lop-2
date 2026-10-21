@@ -644,8 +644,8 @@
   };
 
   /* ======================== CHỦ ĐỀ 12: CỘNG, TRỪ TRONG PHẠM VI 1 000 ======================== */
-  VCALC_PROBLEMS.knt_tru1000=[{a:578,b:346,note:"không mượn",op:"-"},{a:849,b:325,note:"không mượn",op:"-"}];
-  VCALC_PROBLEMS.knt_tru1000n=[{a:432,b:158,note:"có mượn",op:"-"},{a:625,b:287,note:"có mượn",op:"-"}];
+  VCALC_PROBLEMS.knt_tru1000=[{a:578,b:346,note:"không nhớ",op:"-"},{a:849,b:325,note:"không nhớ",op:"-"}];
+  VCALC_PROBLEMS.knt_tru1000n=[{a:432,b:158,note:"có nhớ",op:"-"},{a:625,b:287,note:"có nhớ",op:"-"}];
 
   function subNoBorrow(){
     const a2=R(2,9), b2=R(1,a2), a1=R(0,9), b1=R(0,a1), a0=R(0,9), b0=R(0,a0);
@@ -685,13 +685,13 @@
   };
   T.knt_tru1000n={
     title:"Phép trừ (có nhớ) trong phạm vi 1 000",
-    learn:{ intro:"Trừ có nhớ: khi chữ số ở số bị trừ bé hơn chữ số ở số trừ, ta mượn 1 ở hàng liền trước (10 đơn vị) rồi trừ. Xem từng bước bên dưới.",
+    learn:{ intro:"Trừ có nhớ: khi chữ số ở số bị trừ bé hơn chữ số ở số trừ, ta lấy thêm 10, viết kết quả và nhớ 1 sang hàng liền trước. Xem từng bước bên dưới.",
       blocks:[
         {type:"vcalc"},
-        {type:"example", html:"<b>Ví dụ 432 − 158:</b> đơn vị 2 &lt; 8, mượn 1 chục: 12 − 8 = 4; chục 3 − 1 = 2 &lt; 5, mượn 1 trăm: 12 − 5 = 7; trăm 4 − 1 − 1 = 2. Vậy 432 − 158 = 274."}
+        {type:"example", html:"<b>Ví dụ 432 − 158:</b> 2 không trừ được 8, lấy 12 − 8 = 4, viết 4 nhớ 1; 3 trừ 1 bằng 2, 2 không trừ được 5, lấy 12 − 5 = 7, viết 7 nhớ 1; 4 trừ 1 bằng 3, 3 − 1 = 2. Vậy 432 − 158 = 274."}
       ]},
     practice:[
-      {type:"fill", q:"Tính:", expr:"432 − 158", answer:274, hint:"2 < 8 nên mượn 1 chục"},
+      {type:"fill", q:"Tính:", expr:"432 − 158", answer:274, hint:"2 < 8 nên lấy 12 − 8 = 4, nhớ 1"},
       {type:"fill", q:"Tính:", expr:"625 − 287", answer:338},
       {type:"mc", q:"Hiệu của 511 và 237 là:", options:["274","284","374","264"], answer:0},
     ],
@@ -700,7 +700,7 @@
       {type:"fill", q:"Tính:", expr:"500 − 164", answer:336},
       {type:"fill", q:"Một đội có 361 bạn, 175 bạn là nữ. Có bao nhiêu bạn nam?", answer:186},
     ],
-    gen:subGens(subBorrow,"Không đủ trừ thì mượn 1 ở hàng liền trước")
+    gen:subGens(subBorrow,"Không đủ trừ thì lấy thêm 10, viết kết quả và nhớ 1")
   };
 
   T.knt_luyentap_congtru1000={
@@ -720,8 +720,8 @@
           {type:"example", html:"<b>Cách làm:</b> 8 − 6 = 2, 7 − 4 = 3, 5 − 3 = 2."}
         ]},
         { title:"Bài 62. Trừ có nhớ", blocks:[
-          {type:"concept", text:"Không đủ trừ thì mượn 1 ở hàng liền trước:", big:"432 − 158 = 274"},
-          {type:"example", html:"<b>Cách làm:</b> mượn 1 chục: 12 − 8 = 4; mượn 1 trăm: 12 − 5 = 7; 4 − 1 − 1 = 2."}
+          {type:"concept", text:"Không đủ trừ thì lấy thêm 10 rồi nhớ 1:", big:"432 − 158 = 274"},
+          {type:"example", html:"<b>Cách làm:</b> 12 − 8 = 4 (nhớ 1); 3 − 1 = 2, 12 − 5 = 7 (nhớ 1); 4 − 1 = 3, 3 − 1 = 2."}
         ]},
       ]},
     practice:[
